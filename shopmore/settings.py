@@ -7,11 +7,11 @@ from pathlib import Path
 from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-your-secret-key-here'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-your-secret-key-here')
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['shopmore.fly.dev', 'localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -99,3 +99,15 @@ FLUTTER_SECRET_KEY = config("FLUTTERWAVE_SECRET_KEY")
 FLUTTERWAVE_PUBLIC_KEY = "FLWPUBK_TEST-df3d4643c70606f563a47b27e8a62872-X"
 FLUTTERWAVE_SECRET_KEY = "FLWSECK_TEST-3e3c6363448c60e6e29d9bbc0a5364b0-X"
 FLUTTERWAVE_ENCRYPTION_KEY = "FLWSECK_TESTba3824b8453d"
+
+# Security settings for production
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
