@@ -1,0 +1,50 @@
+<!-- templates/orders.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="padding: 3rem 0;">
+    <h1 style="color: var(--vivid-yellow); margin-bottom: 2rem;">My Orders</h1>
+    
+    <div style="background: var(--light-black); border-radius: 15px; overflow: hidden;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead style="background: var(--dark-black);">
+                <tr>
+                    <th style="padding: 1rem; text-align: left;">Order Number</th>
+                    <th style="padding: 1rem; text-align: left;">Date</th>
+                    <th style="padding: 1rem; text-align: left;">Total</th>
+                    <th style="padding: 1rem; text-align: left;">Status</th>
+                    <th style="padding: 1rem; text-align: left;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr style="border-bottom: 1px solid var(--medium-black);">
+                    <!-- ORDER NUMBER HIGHLIGHTED -->
+                    <td style="padding: 1rem;">
+                        <strong style="color: var(--vivid-yellow);">{{ order.order_number }}</strong>
+                    </td>
+                    <td style="padding: 1rem;">{{ order.created_at|date:"M d, Y" }}</td>
+                    <td style="padding: 1rem;">${{ order.grand_total }}</td>
+                    <td style="padding: 1rem;">
+                        <span class="status {{ order.status }}">{{ order.get_status_display }}</span>
+                    </td>
+                    <td style="padding: 1rem;">
+                        <!-- TRACK BUTTON -->
+                        <a href="{% url 'track_order' %}?order={{ order.order_number }}" 
+                           style="color: var(--vivid-yellow); text-decoration: none;">
+                            <i class="fas fa-truck"></i> Track
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding: 3rem; text-align: center; color: var(--medium-gray);">
+                        No orders yet. <a href="{% url 'products' %}" style="color: var(--vivid-yellow);">Start Shopping</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

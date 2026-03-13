@@ -1,0 +1,39 @@
+<!-- templates/emails/order_confirmation.html -->
+<!DOCTYPE html>
+<html>
+<body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background: #f68b1e; padding: 20px; text-align: center;">
+        <h1 style="color: white;">Order Confirmed!</h1>
+    </div>
+    
+    <div style="padding: 20px;">
+        <h2>Thank you for your order, {{ order.user.username }}!</h2>
+        
+        <!-- HIGHLIGHTED ORDER NUMBER -->
+        <div style="background: #f5f5f5; padding: 20px; text-align: center; margin: 20px 0;">
+            <p style="color: #666;">Your Order Number</p>
+            <h1 style="color: #f68b1e; font-size: 24px;">{{ order.order_number }}</h1>
+        </div>
+        
+        <!-- TRACKING BUTTON -->
+        <a href="http://{{ domain }}{% url 'track_order' %}?order={{ order.order_number }}" 
+           style="display: inline-block; background: #f68b1e; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">
+            Track Your Order
+        </a>
+        
+        <h3>Order Summary</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+            {% for item in order.items.all %}
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">{{ item.product.name }} x {{ item.quantity }}</td>
+                <td style="padding: 10px; text-align: right;">${{ item.price }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+        <p style="margin-top: 20px;">
+            <strong>Total: ${{ order.grand_total }}</strong>
+        </p>
+    </div>
+</body>
+</html>

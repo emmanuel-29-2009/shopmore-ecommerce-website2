@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Track Your Order - ShopMore{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 3rem 0;">
+    <!-- Page Header -->
+    <div class="page-header" style="text-align: center; margin-bottom: 3rem;">
+        <h1 style="color: var(--vivid-yellow); font-size: 2.5rem; margin-bottom: 1rem;">
+            <i class="fas fa-search-location"></i> Track Your Order
+        </h1>
+        <p style="color: var(--medium-gray); font-size: 1.2rem; max-width: 600px; margin: 0 auto;">
+            Enter your order number or tracking number to see real-time updates on your package
+        </p>
+    </div>
+
+    <!-- Tracking Form -->
+    <div style="max-width: 600px; margin: 0 auto;">
+        <div style="background: var(--light-black); padding: 3rem; border-radius: 20px; border: 2px solid var(--medium-black); box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <form method="POST" action="{% url 'track_order' %}">
+                {% csrf_token %}
+                
+                <div style="margin-bottom: 2rem;">
+                    <label style="display: block; color: var(--white); font-weight: 600; margin-bottom: 0.75rem; font-size: 1.1rem;">
+                        <i class="fas fa-hashtag" style="color: var(--vivid-yellow); margin-right: 0.5rem;"></i>
+                        Order / Tracking Number
+                    </label>
+                    <div style="position: relative;">
+                        <i class="fas fa-box" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--medium-gray);"></i>
+                        <input type="text" 
+                               name="tracking_number" 
+                               placeholder="e.g., ORD-20240220-ABC123 or TRK-20240220-XYZ789"
+                               required
+                               style="width: 100%; padding: 1rem 1rem 1rem 3rem; border-radius: 10px; border: 2px solid var(--medium-black); background: var(--dark-black); color: var(--white); font-size: 1rem; transition: all 0.3s ease;"
+                               onfocus="this.style.borderColor='var(--vivid-yellow)'; this.style.boxShadow='0 0 0 3px rgba(246,139,30,0.2)';"
+                               onblur="this.style.borderColor='var(--medium-black)'; this.style.boxShadow='none';">
+                    </div>
+                    <p style="color: var(--medium-gray); font-size: 0.9rem; margin-top: 0.5rem;">
+                        <i class="fas fa-info-circle"></i> You can find this in your order confirmation email
+                    </p>
+                </div>
+
+                <button type="submit" 
+                        style="width: 100%; padding: 1rem; background: var(--vivid-yellow); color: var(--rich-black); border: none; border-radius: 10px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                    <i class="fas fa-search"></i> Track Order
+                </button>
+            </form>
+
+            <div style="margin-top: 2rem; text-align: center; padding-top: 2rem; border-top: 1px solid var(--medium-black);">
+                <p style="color: var(--medium-gray); margin-bottom: 1rem;">
+                    <i class="fas fa-envelope"></i> 
+                    Didn't receive an order confirmation?
+                </p>
+                <a href="{% url 'contact' %}" style="color: var(--vivid-yellow); text-decoration: none; font-weight: 600;">
+                    Contact Support <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Tips -->
+        <div style="margin-top: 3rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <div style="background: var(--light-black); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--medium-black); text-align: center;">
+                <div style="width: 60px; height: 60px; background: rgba(246,139,30,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                    <i class="fas fa-clock" style="color: var(--vivid-yellow); font-size: 1.5rem;"></i>
+                </div>
+                <h3 style="color: var(--white); margin-bottom: 0.5rem; font-size: 1.2rem;">Order Not Found?</h3>
+                <p style="color: var(--medium-gray); font-size: 0.95rem;">Orders typically appear in our system within 24 hours of placement.</p>
+            </div>
+            
+            <div style="background: var(--light-black); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--medium-black); text-align: center;">
+                <div style="width: 60px; height: 60px; background: rgba(246,139,30,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                    <i class="fas fa-truck" style="color: var(--vivid-yellow); font-size: 1.5rem;"></i>
+                </div>
+                <h3 style="color: var(--white); margin-bottom: 0.5rem; font-size: 1.2rem;">Shipping Updates</h3>
+                <p style="color: var(--medium-gray); font-size: 0.95rem;">Tracking information updates every 24-48 hours during transit.</p>
+            </div>
+            
+            <div style="background: var(--light-black); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--medium-black); text-align: center;">
+                <div style="width: 60px; height: 60px; background: rgba(246,139,30,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                    <i class="fas fa-headset" style="color: var(--vivid-yellow); font-size: 1.5rem;"></i>
+                </div>
+                <h3 style="color: var(--white); margin-bottom: 0.5rem; font-size: 1.2rem;">Need Help?</h3>
+                <p style="color: var(--medium-gray); font-size: 0.95rem;">
+                    Email: <a href="mailto:support@shopmore.com" style="color: var(--vivid-yellow);">support@shopmore.com</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

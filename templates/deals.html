@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Hot Deals - ShopMore{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>🔥 Hot Deals</h1>
+        <p>Limited time offers and exclusive discounts</p>
+    </div>
+</div>
+
+<section class="content-section">
+    <div class="container">
+        <div class="products-grid">
+            {% for product in products %}
+            <div class="product-card">
+                <div style="position: absolute; top: 1rem; left: 1rem; background: #ff4444; color: var(--white); padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold;">
+                    SALE
+                </div>
+                
+                <div class="product-image">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">{{ product.name }}</h3>
+                    <p class="product-category">{{ product.category.name }}</p>
+                    <div class="product-price">
+                        <span class="old-price">${{ product.old_price }}</span>
+                        <span class="discount">{{ product.discount_percentage }}% OFF</span>
+                        <br>
+                        ${{ product.price }}
+                    </div>
+                    <button class="btn" style="width: 100%; background: #ff4444;">Grab Deal</button>
+                </div>
+            </div>
+            {% empty %}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 4rem;">
+                <div style="font-size: 4rem; color: var(--medium-gray); margin-bottom: 1rem;">
+                    <i class="fas fa-tag"></i>
+                </div>
+                <h3>No deals available</h3>
+                <p style="color: var(--medium-gray);">Check back later for amazing deals</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

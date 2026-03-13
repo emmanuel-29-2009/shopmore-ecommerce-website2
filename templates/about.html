@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us - ShopMore{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>About ShopMore</h1>
+        <p>Your trusted partner in online shopping</p>
+    </div>
+</div>
+
+<section class="content-section">
+    <div class="container">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div style="background: var(--light-black); padding: 3rem; border-radius: 10px; border: 1px solid var(--medium-black);">
+                <h2 style="color: var(--vivid-yellow); margin-bottom: 1.5rem;">Our Story</h2>
+                <p style="line-height: 1.8; margin-bottom: 1.5rem;">
+                    Welcome to ShopMore, your premier destination for quality products with exceptional service. 
+                    Founded with the vision to revolutionize online shopping, we bring you the best products 
+                    from around the world right to your doorstep.
+                </p>
+                
+                <p style="line-height: 1.8; margin-bottom: 1.5rem;">
+                    At ShopMore, we believe that shopping should be an enjoyable and seamless experience. 
+                    That's why we've curated a collection of products that combine quality, style, and 
+                    affordability, all while providing outstanding customer service.
+                </p>
+
+                <h3 style="color: var(--vivid-yellow); margin: 2rem 0 1rem;">Our Mission</h3>
+                <p style="line-height: 1.8; margin-bottom: 1.5rem;">
+                    To provide our customers with a superior shopping experience by offering high-quality products, 
+                    competitive prices, and exceptional customer service that exceeds expectations.
+                </p>
+
+                <h3 style="color: var(--vivid-yellow); margin: 2rem 0 1rem;">Why Choose ShopMore?</h3>
+                <div style="display: grid; gap: 1rem; margin-bottom: 2rem;">
+                    <div style="display: flex; align-items: start; gap: 1rem;">
+                        <div style="color: var(--vivid-yellow); font-size: 1.2rem;">✓</div>
+                        <div>
+                            <strong>Quality Products</strong>
+                            <p style="color: var(--medium-gray); margin: 0.25rem 0 0;">Carefully curated selection of premium products</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: start; gap: 1rem;">
+                        <div style="color: var(--vivid-yellow); font-size: 1.2rem;">✓</div>
+                        <div>
+                            <strong>Fast Shipping</strong>
+                            <p style="color: var(--medium-gray); margin: 0.25rem 0 0;">Quick and reliable delivery to your doorstep</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: start; gap: 1rem;">
+                        <div style="color: var(--vivid-yellow); font-size: 1.2rem;">✓</div>
+                        <div>
+                            <strong>Secure Shopping</strong>
+                            <p style="color: var(--medium-gray); margin: 0.25rem 0 0;">Your data and payments are always protected</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: start; gap: 1rem;">
+                        <div style="color: var(--vivid-yellow); font-size: 1.2rem;">✓</div>
+                        <div>
+                            <strong>24/7 Support</strong>
+                            <p style="color: var(--medium-gray); margin: 0.25rem 0 0;">Our team is always here to help you</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="{% url 'products' %}" class="btn">Start Shopping</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

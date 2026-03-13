@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - ShopMore{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <nav style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--medium-gray); font-size: 0.9rem;">
+            <a href="{% url 'home' %}" style="color: var(--vivid-yellow); text-decoration: none;">Home</a>
+            <i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i>
+            <a href="{% url 'products' %}" style="color: var(--vivid-yellow); text-decoration: none;">Products</a>
+            <i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i>
+            <a href="{% url 'products' %}?category={{ product.category.slug }}" style="color: var(--vivid-yellow); text-decoration: none;">{{ product.category.name }}</a>
+            <i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i>
+            <span style="color: var(--white);">{{ product.name|truncatechars:30 }}</span>
+        </nav>
+        <h1>{{ product.name }}</h1>
+        <p>{{ product.category.name }}</p>
+    </div>
+</div>
+
+<section class="content-section">
+    <div class="container">
+        <!-- Messages -->
+        {% if messages %}
+        <div style="margin-bottom: 2rem;">
+            {% for message in messages %}
+            <div style="background: {% if message.tags == 'success' %}var(--success){% elif message.tags == 'error' %}var(--error){% else %}var(--vivid-yellow){% endif %}; 
+                        color: {% if message.tags == 'success' %}white{% else %}var(--dark-black){% endif %}; 
+                        padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 4rem;">
+            <!-- Product Images -->
+            <div>
+                <!-- Main Image -->
+                <div style="background: var(--light-black); border-radius: 15px; padding: 2rem; border: 1px solid var(--medium-black); margin-bottom: 1rem;">
+                    <div style="width: 100%; height: 400px; background: var(--dark-black); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" 
+                             style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 10px;">
+                        {% else %}
+                        <i class="fas fa-box" style="font-size: 4rem; color: var(--medium-gray);"></i>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Additional Images (if you have multiple images) -->
+                <div style="display: flex; gap: 1rem; overflow-x: auto; padding: 0.5rem 0;">
+                    <!-- You can add thumbnail images here -->
+                </div>
+            </div>
+
+            <!-- Product Details -->
+            <div>
+                <!-- Price and Rating -->
+                <div style="margin-bottom: 2rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                        <div style="display: flex; align-items: baseline; gap: 1rem;">
+                            <span style="color: var(--vivid-yellow); font-size: 2rem; font-weight: 700;">
+                                ${{ product.price }}
+                            </span>
+                            {% if product.old_price %}
+                            <span style="color: var(--medium-gray); text-decoration: line-through; font-size: 1.2rem;">
+                                ${{ product.old_price }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Stock Status -->
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            {% if product.stock_quantity > 10 %}
+                            <span style="color: var(--success);">
+                                <i class="fas fa-check-circle"></i> In Stock
+                            </span>
+                            {% elif product.stock_quantity > 0 %}
+                            <span style="color: var(--vivid-yellow);">
+                                <i class="fas fa-exclamation-circle"></i> Low Stock
+                            </span>
+                            {% else %}
+                            <span style="color: var(--error);">
+                                <i class="fas fa-times-circle"></i> Out of Stock
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Short Description -->
+                    <p style="color: var(--white); font-size: 1.1rem; line-height: 1.6;">
+                        {{ product.short_description|default:product.description|truncatewords:30 }}
+                    </p>
+                </div>
+
+                <!-- Actions -->
+                <div style="margin-bottom: 2rem;">
+                    {% if product.stock_quantity > 0 %}
+                    <form method="POST" action="{% url 'add_to_cart' product.id %}" style="margin-bottom: 1rem;">
+                        {% csrf_token %}
+                        <div style="display: flex; gap: 1rem;">
+                            <!-- Quantity Selector -->
+                            <div style="display: flex; align-items: center; background: var(--dark-black); border-radius: 8px; border: 1px solid var(--medium-black);">
+                                <button type="button" onclick="decreaseQuantity()" style="background: none; border: none; color: var(--white); padding: 1rem; cursor: pointer;">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.stock_quantity }}" 
+                                       style="background: none; border: none; color: var(--white); width: 60px; text-align: center; font-size: 1rem;">
+                                <button type="button" onclick="increaseQuantity()" style="background: none; border: none; color: var(--white); padding: 1rem; cursor: pointer;">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            
+                            <button type="submit" style="flex: 1; background: var(--vivid-yellow); color: var(--dark-black); padding: 1rem; border-radius: 8px; border: none; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.5rem; cursor: pointer; font-size: 1rem;">
+                                <i class="fas fa-cart-plus"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </form>
+                    {% endif %}
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <form method="POST" action="{% url 'add_to_wishlist' product.id %}" style="flex: 1;">
+                            {% csrf_token %}
+                            <button type="submit" style="width: 100%; background: transparent; border: 1px solid var(--medium-gray); color: var(--medium-gray); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-weight: 600;">
+                                <i class="far fa-heart"></i>
+                                Add to Wishlist
+                            </button>
+                        </form>
+                        
+                        <button onclick="shareProduct()" style="background: transparent; border: 1px solid var(--medium-gray); color: var(--medium-gray); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-weight: 600;">
+                            <i class="fas fa-share-alt"></i>
+                            Share
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Details -->
+                <div style="background: var(--light-black); border-radius: 15px; padding: 1.5rem; border: 1px solid var(--medium-black); margin-bottom: 2rem;">
+                    <h3 style="color: var(--vivid-yellow); margin-bottom: 1rem;">Product Details</h3>
+                    <div style="color: var(--medium-gray); line-height: 1.8;">
+                        {{ product.description|linebreaks }}
+                    </div>
+                    
+                    <!-- Additional Details -->
+                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--medium-black);">
+                        <h4 style="color: var(--white); margin-bottom: 1rem;">Additional Information</h4>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                            <div>
+                                <span style="color: var(--medium-gray);">SKU:</span>
+                                <span style="color: var(--white); margin-left: 0.5rem;">{{ product.sku|default:"N/A" }}</span>
+                            </div>
+                            <div>
+                                <span style="color: var(--medium-gray);">Category:</span>
+                                <span style="color: var(--white); margin-left: 0.5rem;">{{ product.category.name }}</span>
+                            </div>
+                            <div>
+                                <span style="color: var(--medium-gray);">In Stock:</span>
+                                <span style="color: var(--white); margin-left: 0.5rem;">{{ product.stock_quantity }} units</span>
+                            </div>
+                            <div>
+                                <span style="color: var(--medium-gray);">Brand:</span>
+                                <span style="color: var(--white); margin-left: 0.5rem;">{{ product.brand|default:"Generic" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Products -->
+        {% if related_products %}
+        <div>
+            <h2 style="color: var(--vivid-yellow); margin-bottom: 2rem; text-align: center;">Related Products</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem;">
+                {% for related in related_products %}
+                <div style="background: var(--light-black); border-radius: 15px; padding: 1.5rem; border: 1px solid var(--medium-black);">
+                    <!-- Product Image -->
+                    <div style="width: 100%; height: 200px; background: var(--dark-black); border-radius: 10px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center;">
+                        {% if related.image %}
+                        <img src="{{ related.image.url }}" alt="{{ related.name }}" 
+                             style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+                        {% else %}
+                        <i class="fas fa-box" style="font-size: 2rem; color: var(--medium-gray);"></i>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Product Info -->
+                    <div>
+                        <h3 style="color: var(--white); margin-bottom: 0.5rem; font-size: 1rem;">
+                            <a href="{% url 'product_detail' related.id %}" style="color: inherit; text-decoration: none;">
+                                {{ related.name|truncatechars:40 }}
+                            </a>
+                        </h3>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <div style="color: var(--vivid-yellow); font-weight: 700;">
+                                ${{ related.price }}
+                            </div>
+                            {% if related.old_price %}
+                            <div style="color: var(--medium-gray); text-decoration: line-through; font-size: 0.9rem;">
+                                ${{ related.old_price }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- View Details Button -->
+                        <a href="{% url 'product_detail' related.id %}" style="display: block; width: 100%; background: transparent; border: 1px solid var(--vivid-yellow); color: var(--vivid-yellow); padding: 0.75rem; border-radius: 8px; text-decoration: none; text-align: center; font-weight: 600;">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<script>
+    // Quantity controls
+    function decreaseQuantity() {
+        const input = document.getElementById('quantity');
+        if (parseInt(input.value) > 1) {
+            input.value = parseInt(input.value) - 1;
+        }
+    }
+    
+    function increaseQuantity() {
+        const input = document.getElementById('quantity');
+        const max = parseInt(input.max) || 10;
+        if (parseInt(input.value) < max) {
+            input.value = parseInt(input.value) + 1;
+        }
+    }
+    
+    // Share functionality
+    function shareProduct() {
+        if (navigator.share) {
+            navigator.share({
+                title: '{{ product.name }}',
+                text: 'Check out this product on ShopMore!',
+                url: window.location.href,
+            });
+        } else {
+            // Fallback: Copy to clipboard
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Link copied to clipboard!');
+            });
+        }
+    }
+</script>
+{% endblock %}

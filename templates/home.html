@@ -1,0 +1,790 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+{% load static %}
+
+<!-- Hero Carousel -->
+<section class="hero-carousel">
+    <div class="carousel-container">
+        <div class="carousel-slides">
+            <!-- Slide 1 -->
+            <div class="carousel-slide active">
+                <div class="container">
+                    <h1>Summer Sale Up to 50% OFF</h1>
+                    <p>Discover amazing products with exclusive deals. Fast shipping and secure payments guaranteed.</p>
+                    <div class="carousel-buttons">
+                        <a href="{% url 'products' %}" class="btn btn-large">
+                            <i class="fas fa-shopping-bag"></i>
+                            Shop Now
+                        </a>
+                        <a href="{% url 'deals' %}" class="btn btn-large btn-secondary">
+                            <i class="fas fa-bolt"></i>
+                            Hot Deals
+                        </a>
+                    </div>
+                </div>
+                <div class="carousel-overlay"></div>
+                <div class="carousel-bg" style="background-image: url('{% static 'image/banner1.jpg' %}');" ></div>
+            </div>
+            
+            <!-- Slide 2 -->
+            <div class="carousel-slide">
+                <div class="container">
+                    <h1>New Tech Collection 2024</h1>
+                    <p>Get the latest gadgets with exclusive discounts. Free shipping on all electronics orders.</p>
+                    <div class="carousel-buttons">
+                        <a href="{% url 'category' 'electronics' %}" class="btn btn-large">
+                            <i class="fas fa-laptop"></i>
+                            Shop Electronics
+                        </a>
+                        <a href="{% url 'deals' %}" class="btn btn-large btn-secondary">
+                            <i class="fas fa-bolt"></i>
+                            View Deals
+                        </a>
+                    </div>
+                </div>
+                <div class="carousel-overlay"></div>
+                <div class="carousel-bg" style="background-image: url('{% static 'image/banner2.jpg' %}');"></div>
+            </div>
+            
+            <!-- Slide 3 -->
+            <div class="carousel-slide">
+                <div class="container">
+                    <h1>Weekend Special 25% OFF</h1>
+                    <p>Home & garden essentials at unbeatable prices. Limited time offer - don't miss out!</p>
+                    <div class="carousel-buttons">
+                        <a href="{% url 'category' 'home-garden' %}" class="btn btn-large">
+                            <i class="fas fa-home"></i>
+                            Shop Home
+                        </a>
+                        <a href="{% url 'deals' %}" class="btn btn-large btn-secondary">
+                            <i class="fas fa-bolt"></i>
+                            Hot Deals
+                        </a>
+                    </div>
+                </div>
+                <div class="carousel-overlay"></div>
+                <div class="carousel-bg" style="background-image: url('{% static 'image/banner3.jpg' %}');"></div>
+            </div>
+        </div>
+        
+        <!-- Carousel Controls -->
+        <button class="carousel-control prev">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="carousel-control next">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        
+        <!-- Carousel Indicators -->
+        <div class="carousel-indicators">
+            <button class="indicator active" data-slide="0"></button>
+            <button class="indicator" data-slide="1"></button>
+            <button class="indicator" data-slide="2"></button>
+        </div>
+    </div>
+</section>
+
+<!-- Add this CSS to your main style.css file -->
+<style>
+/* Hero Carousel Styles */
+.hero-carousel {
+    height: 500px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 3rem;
+}
+
+.carousel-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-slides {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.carousel-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.carousel-slide.active {
+    opacity: 1;
+}
+
+.carousel-slide .container {
+    position: relative;
+    z-index: 3;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+.carousel-slide h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.carousel-slide p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: rgba(255,255,255,0.9);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.carousel-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.carousel-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+}
+
+.carousel-bg {
+    background-color: var(--vivid-yellow);
+}
+
+.carousel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.3));
+    z-index: 2;
+}
+
+.carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 4;
+    transition: all 0.3s ease;
+}
+
+.carousel-control:hover {
+    background: var(--vivid-yellow);
+    color: var(--dark-black);
+}
+
+.carousel-control.prev {
+    left: 20px;
+}
+
+.carousel-control.next {
+    right: 20px;
+}
+
+.carousel-indicators {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    z-index: 4;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator.active {
+    background: var(--vivid-yellow);
+    transform: scale(1.2);
+}
+
+.indicator:hover {
+    background: var(--bright-yellow);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-carousel {
+        height: 400px;
+    }
+    
+    .carousel-slide h1 {
+        font-size: 2rem;
+    }
+    
+    .carousel-slide p {
+        font-size: 1rem;
+    }
+    
+    .carousel-control {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .carousel-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .carousel-buttons .btn {
+        width: 100%;
+        max-width: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-carousel {
+        height: 350px;
+    }
+    
+    .carousel-slide h1 {
+        font-size: 1.5rem;
+    }
+    
+    .carousel-slide p {
+        font-size: 0.9rem;
+    }
+}
+</style>
+
+<!-- JavaScript for Carousel -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const indicators = document.querySelectorAll('.indicator');
+    const prevBtn = document.querySelector('.carousel-control.prev');
+    const nextBtn = document.querySelector('.carousel-control.next');
+    let currentSlide = 0;
+    let slideInterval;
+    
+    if (slides.length === 0) return;
+    
+    function initCarousel() {
+        showSlide(currentSlide);
+        startAutoSlide();
+        
+        if (prevBtn) prevBtn.addEventListener('click', showPrevSlide);
+        if (nextBtn) nextBtn.addEventListener('click', showNextSlide);
+        
+        indicators.forEach(indicator => {
+            indicator.addEventListener('click', function() {
+                const slideIndex = parseInt(this.dataset.slide);
+                showSlide(slideIndex);
+                resetAutoSlide();
+            });
+        });
+        
+        const carouselContainer = document.querySelector('.carousel-container');
+        if (carouselContainer) {
+            carouselContainer.addEventListener('mouseenter', pauseAutoSlide);
+            carouselContainer.addEventListener('mouseleave', startAutoSlide);
+            carouselContainer.addEventListener('touchstart', pauseAutoSlide);
+            carouselContainer.addEventListener('touchend', startAutoSlide);
+        }
+    }
+    
+    function showSlide(n) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        indicators.forEach(indicator => indicator.classList.remove('active'));
+        
+        if (n >= slides.length) currentSlide = 0;
+        else if (n < 0) currentSlide = slides.length - 1;
+        else currentSlide = n;
+        
+        if (slides[currentSlide]) slides[currentSlide].classList.add('active');
+        if (indicators[currentSlide]) indicators[currentSlide].classList.add('active');
+    }
+    
+    function showNextSlide() {
+        showSlide(currentSlide + 1);
+        resetAutoSlide();
+    }
+    
+    function showPrevSlide() {
+        showSlide(currentSlide - 1);
+        resetAutoSlide();
+    }
+    
+    function startAutoSlide() {
+        if (slideInterval) clearInterval(slideInterval);
+        slideInterval = setInterval(showNextSlide, 5000);
+    }
+    
+    function pauseAutoSlide() {
+        if (slideInterval) clearInterval(slideInterval);
+    }
+    
+    function resetAutoSlide() {
+        pauseAutoSlide();
+        startAutoSlide();
+    }
+    
+    initCarousel();
+    
+    // Touch swipe for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    const carouselContainer = document.querySelector('.carousel-container');
+    if (carouselContainer) {
+        carouselContainer.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        carouselContainer.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+    }
+    
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        
+        if (touchStartX - touchEndX > swipeThreshold) {
+            showNextSlide();
+            resetAutoSlide();
+        }
+        
+        if (touchEndX - touchStartX > swipeThreshold) {
+            showPrevSlide();
+            resetAutoSlide();
+        }
+    }
+});
+</script>
+
+<!-- Featured Categories - FIXED: Only show existing categories -->
+<section class="content-section">
+    <div class="container">
+        <h2 class="section-title">Shop by Category</h2>
+        <p class="section-subtitle">Explore our wide range of product categories</p>
+        
+        <div class="products-grid">
+            {% for category in categories %}
+            <a href="{% url 'category' category.slug %}" class="product-card" style="text-decoration: none;">
+                <div class="product-image">
+                    {% if category.image %}
+                        <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                    {% else %}
+                        <i class="fas fa-tag"></i>
+                    {% endif %}
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">{{ category.name }}</h3>
+                    <p class="product-category">{{ category.description|default:"Browse products" }}</p>
+                    <div style="text-align: center;">
+                        <span style="color: var(--medium-gray);">
+                            {% if category.product_count %}
+                                {{ category.product_count }} Products
+                            {% else %}
+                                20+ Products
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </a>
+            {% empty %}
+            <!-- If no categories in database, show message -->
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                <p style="color: var(--medium-gray);">No categories available yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="content-section" style="background: var(--dark-black);">
+    <div class="container">
+        <h2 class="section-title">Featured Products</h2>
+        <p class="section-subtitle">Handpicked items just for you</p>
+        
+        <div class="products-grid">
+            {% for product in featured_products %}
+            <div class="product-card">
+                <div class="product-badges">
+                    <div class="product-badge badge-featured">Featured</div>
+                    {% if product.is_bestseller %}
+                    <div class="product-badge badge-bestseller">Bestseller</div>
+                    {% endif %}
+                    {% if product.old_price %}
+                    <div class="product-badge badge-sale">Sale</div>
+                    {% endif %}
+                </div>
+                
+                <div class="product-image">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    {% else %}
+                        <i class="fas fa-box"></i>
+                    {% endif %}
+                </div>
+                
+                <div class="product-actions">
+                    <form method="POST" action="{% url 'add_to_wishlist' product.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button class="action-btn wishlist-btn" data-product="{{ product.id }}">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </form>
+                    <a href="{% url 'product_detail' product.id %}" class="action-btn quick-view">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                </div>
+                
+                <div class="product-info">
+                    <h3 class="product-title">{{ product.name }}</h3>
+                    <p class="product-category">
+                        <i class="fas fa-tag"></i>
+                        {{ product.category.name }}
+                    </p>
+                    
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="rating-count">(128)</span>
+                    </div>
+                    
+                    <div class="product-price">
+                        {% if product.old_price %}
+                            <span class="old-price">${{ product.old_price }}</span>
+                            <span class="discount">{{ product.discount_percentage }}% OFF</span>
+                        {% endif %}
+                        <span class="current-price">${{ product.price }}</span>
+                    </div>
+                    
+                    <form method="POST" action="{% url 'add_to_cart' product.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn add-to-cart">
+                            <i class="fas fa-shopping-cart"></i>
+                            Add to Cart
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% empty %}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                <div style="font-size: 4rem; color: var(--medium-gray); margin-bottom: 1rem;">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3 style="margin-bottom: 1rem; color: var(--vivid-yellow);">No Featured Products</h3>
+                <p style="color: var(--medium-gray); margin-bottom: 2rem;">Featured products will appear here soon</p>
+                <a href="{% url 'products' %}" class="btn">Browse All Products</a>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="{% url 'products' %}" class="btn btn-outline">
+                View All Products
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Special Offers -->
+<section class="content-section">
+    <div class="container">
+        <h2 class="section-title">Special Offers</h2>
+        <p class="section-subtitle">Limited time deals you don't want to miss</p>
+        
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2rem; height: 400px;">
+            <!-- Main Offer -->
+            <div style="background: linear-gradient(135deg, var(--light-black), var(--medium-black)); border-radius: 15px; padding: 3rem; position: relative; overflow: hidden; border: 2px solid var(--vivid-yellow);">
+                <div style="position: relative; z-index: 2;">
+                    <h3 style="color: var(--vivid-yellow); font-size: 1.5rem; margin-bottom: 0.5rem;">Summer Sale</h3>
+                    <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--white);">Up to 50% OFF</h2>
+                    <p style="color: var(--medium-gray); margin-bottom: 2rem; font-size: 1.1rem;">On selected fashion items</p>
+                    <a href="{% url 'deals' %}" class="btn btn-large">Shop Now</a>
+                </div>
+                <div style="position: absolute; top: 0; right: 0; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, var(--vivid-yellow)); opacity: 0.1;"></div>
+            </div>
+            
+            <!-- Side Offers -->
+            <div style="background: linear-gradient(135deg, var(--light-black), var(--medium-black)); border-radius: 15px; padding: 2rem; display: flex; flex-direction: column; justify-content: center; border: 1px solid var(--medium-black);">
+                <h3 style="color: var(--vivid-yellow); margin-bottom: 1rem;">New Tech</h3>
+                <h4 style="color: var(--white); margin-bottom: 1rem;">Latest Gadgets</h4>
+                <p style="color: var(--medium-gray); margin-bottom: 1.5rem;">Free shipping on all orders</p>
+                <a href="{% url 'category' 'electronics' %}" class="btn btn-secondary">Explore</a>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, var(--light-black), var(--medium-black)); border-radius: 15px; padding: 2rem; display: flex; flex-direction: column; justify-content: center; border: 1px solid var(--medium-black);">
+                <h3 style="color: var(--vivid-yellow); margin-bottom: 1rem;">Weekend Deal</h3>
+                <h4 style="color: var(--white); margin-bottom: 1rem;">25% OFF</h4>
+                <p style="color: var(--medium-gray); margin-bottom: 1.5rem;">Home & garden essentials</p>
+                <a href="{% url 'category' 'home-garden' %}" class="btn btn-secondary">Discover</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- New Arrivals -->
+<section class="content-section" style="background: var(--dark-black);">
+    <div class="container">
+        <h2 class="section-title">New Arrivals</h2>
+        <p class="section-subtitle">Fresh products just added to our collection</p>
+        
+        <div class="products-grid">
+            {% for product in new_arrivals %}
+            <div class="product-card">
+                <div class="product-badges">
+                    <div class="product-badge badge-new">New</div>
+                    {% if product.is_featured %}
+                    <div class="product-badge badge-featured">Featured</div>
+                    {% endif %}
+                </div>
+                
+                <div style="width: 100%; height: 200px; background: var(--dark-black); border-radius: 10px; margin-bottom: 1rem; position: relative; overflow: hidden;">
+                    <a href="{% url 'product_detail' product.id %}" style="display: block; width: 100%; height: 100%;">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" 
+                                 style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            <img src="{% static 'image/banner.jpg' %}" alt="{{ product.name }}"
+                                 style="width: 100%; height: 100%; object-fit: cover;">
+                        {% endif %}
+                    </a>
+                    
+                    <div style="position: absolute; top: 0.5rem; right: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                        <form method="POST" action="{% url 'add_to_wishlist' product.id %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" style="width: 35px; height: 35px; background: var(--dark-black); border: 1px solid var(--medium-black); border-radius: 50%; color: var(--medium-gray); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease;">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </form>
+                        
+                        <a href="{% url 'product_detail' product.id %}" style="width: 35px; height: 35px; background: var(--dark-black); border: 1px solid var(--medium-black); border-radius: 50%; color: var(--medium-gray); display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s ease;">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div style="padding: 0 0.5rem;">
+                    <h3 style="color: var(--white); margin-bottom: 0.5rem; font-size: 1.1rem;">
+                        <a href="{% url 'product_detail' product.id %}" style="color: inherit; text-decoration: none;">
+                            {{ product.name }}
+                        </a>
+                    </h3>
+                    <p style="color: var(--medium-gray); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        <i class="fas fa-tag"></i>
+                        {{ product.category.name }}
+                    </p>
+                    
+                    <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                        <div style="color: #FFD700; margin-right: 0.5rem;">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <span style="color: var(--medium-gray); font-size: 0.8rem;">(64)</span>
+                    </div>
+                    
+                    <div style="color: var(--vivid-yellow); font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem;">
+                        ${{ product.price }}
+                    </div>
+                    
+                    <div style="display: flex; gap: 0.5rem;">
+                        <form method="POST" action="{% url 'add_to_cart' product.id %}" style="flex: 1;">
+                            {% csrf_token %}
+                            <button type="submit" style="width: 100%; background: var(--vivid-yellow); color: var(--dark-black); padding: 0.5rem; border-radius: 8px; border: none; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.3rem; cursor: pointer; font-size: 0.9rem;">
+                                <i class="fas fa-shopping-cart"></i>
+                                Add to Cart
+                            </button>
+                        </form>
+                        
+                        <a href="{% url 'product_detail' product.id %}" style="background: transparent; border: 1px solid var(--vivid-yellow); color: var(--vivid-yellow); padding: 0.5rem; border-radius: 8px; text-decoration: none; display: flex; align-items: center; justify-content: center; min-width: 40px;">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                <div style="font-size: 4rem; color: var(--medium-gray); margin-bottom: 1rem;">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <h3 style="margin-bottom: 1rem; color: var(--vivid-yellow);">No New Arrivals</h3>
+                <p style="color: var(--medium-gray);">Check back later for new products</p>
+                <a href="{% url 'products' %}" class="btn" style="margin-top: 1rem;">
+                    <i class="fas fa-shopping-bag"></i>
+                    Browse All Products
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="{% url 'new_arrivals' %}" class="btn btn-outline">
+                View All New Arrivals
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="content-section">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: center;">
+            <div>
+                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--vivid-yellow), var(--bright-yellow)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: var(--rich-black); font-size: 2rem;">
+                    <i class="fas fa-shipping-fast"></i>
+                </div>
+                <h3 style="margin-bottom: 1rem; color: var(--white);">Free Shipping</h3>
+                <p style="color: var(--medium-gray);">Free delivery on orders over $50</p>
+            </div>
+            
+            <div>
+                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--vivid-yellow), var(--bright-yellow)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: var(--rich-black); font-size: 2rem;">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 style="margin-bottom: 1rem; color: var(--white);">Secure Payment</h3>
+                <p style="color: var(--medium-gray);">100% secure payment processing</p>
+            </div>
+            
+            <div>
+                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--vivid-yellow), var(--bright-yellow)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: var(--rich-black); font-size: 2rem;">
+                    <i class="fas fa-undo-alt"></i>
+                </div>
+                <h3 style="margin-bottom: 1rem; color: var(--white);">Easy Returns</h3>
+                <p style="color: var(--medium-gray);">30-day return policy</p>
+            </div>
+            
+            <div>
+                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--vivid-yellow), var(--bright-yellow)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: var(--rich-black); font-size: 2rem;">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3 style="margin-bottom: 1rem; color: var(--white);">24/7 Support</h3>
+                <p style="color: var(--medium-gray);">Round the clock customer support</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="content-section" style="background: var(--dark-black);">
+    <div class="container">
+        <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+            <h2 style="color: var(--vivid-yellow); margin-bottom: 1rem; font-size: 2rem;">Stay Updated</h2>
+            <p style="color: var(--medium-gray); margin-bottom: 2rem;">Subscribe to our newsletter for exclusive deals and new product alerts</p>
+            
+            <form style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                <input type="email" placeholder="Enter your email" style="flex: 1; min-width: 250px; padding: 0.85rem; border-radius: 8px; border: 1px solid var(--medium-black); background: var(--light-black); color: var(--white);">
+                <button type="submit" class="btn">
+                    <i class="fas fa-paper-plane"></i>
+                    Subscribe
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add to cart functionality
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.dataset.product;
+            const productName = this.closest('.product-card').querySelector('.product-title').textContent;
+            
+            showMessage(`"${productName}" added to cart!`, 'success');
+        });
+    });
+    
+    // Wishlist functionality
+    const wishlistButtons = document.querySelectorAll('.wishlist-btn');
+    wishlistButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            const productName = this.closest('.product-card').querySelector('.product-title').textContent;
+            
+            if (icon.classList.contains('far')) {
+                icon.className = 'fas fa-heart';
+                showMessage(`"${productName}" added to wishlist!`, 'success');
+            } else {
+                icon.className = 'far fa-heart';
+                showMessage(`"${productName}" removed from wishlist`, 'info');
+            }
+        });
+    });
+    
+    function showMessage(text, type) {
+        const message = document.createElement('div');
+        message.className = `message ${type}`;
+        message.innerHTML = `
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+            <span>${text}</span>
+        `;
+        
+        const messagesContainer = document.querySelector('.messages-container') || createMessagesContainer();
+        messagesContainer.appendChild(message);
+        
+        setTimeout(() => {
+            message.remove();
+        }, 5000);
+    }
+    
+    function createMessagesContainer() {
+        const container = document.createElement('div');
+        container.className = 'messages-container';
+        document.body.appendChild(container);
+        return container;
+    }
+});
+</script>
+{% endblock %}

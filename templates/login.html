@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - ShopMore{% endblock %}
+
+{% block content %}
+<div class="auth-container" style="max-width: 450px; margin: 3rem auto; background: var(--light-black); border-radius: 20px; border: 2px solid var(--vivid-yellow); padding: 2.5rem; box-shadow: 0 10px 30px rgba(246, 139, 30, 0.15);">
+    
+    <!-- Header with decorative elements -->
+    <div style="text-align: center; margin-bottom: 2.5rem; position: relative;">
+        <!-- Decorative lines -->
+        <div style="position: absolute; top: 40px; left: 0; width: 30%; height: 2px; background: linear-gradient(90deg, transparent, var(--vivid-yellow));"></div>
+        <div style="position: absolute; top: 40px; right: 0; width: 30%; height: 2px; background: linear-gradient(90deg, var(--vivid-yellow), transparent);"></div>
+        
+        <!-- Icon with pulse effect -->
+        <div style="width: 90px; height: 90px; background: linear-gradient(135deg, var(--vivid-yellow), var(--bright-yellow)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: var(--rich-black); font-size: 2.5rem; box-shadow: 0 5px 20px rgba(246, 139, 30, 0.4); position: relative;">
+            <i class="fas fa-sign-in-alt"></i>
+            <!-- Pulse effect -->
+            <div style="position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--vivid-yellow); animation: pulse 2s infinite; opacity: 0.5;"></div>
+        </div>
+        
+        <h2 style="color: var(--vivid-yellow); margin-bottom: 0.5rem; font-size: 2rem; font-weight: 700;">Welcome Back</h2>
+        <p style="color: var(--medium-gray); font-size: 1rem;">Sign in to access your account</p>
+    </div>
+    
+    <!-- Form -->
+    <form method="post" class="auth-form" style="display: flex; flex-direction: column; gap: 1.5rem;">
+        {% csrf_token %}
+        
+        <!-- Username field with icon -->
+        <div class="form-group" style="position: relative;">
+            <label for="username" style="display: flex; align-items: center; gap: 0.5rem; color: var(--white); font-weight: 600; margin-bottom: 0.5rem;">
+                <i class="fas fa-user" style="color: var(--vivid-yellow);"></i>
+                Username or Email
+            </label>
+            <div style="position: relative;">
+                <i class="fas fa-envelope" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--medium-gray); z-index: 1;"></i>
+                <input type="text" id="username" name="username" required 
+                       placeholder="Enter your username or email"
+                       style="width: 100%; padding: 0.85rem 0.85rem 0.85rem 45px; border: 2px solid var(--medium-black); border-radius: 12px; background: var(--dark-black); color: var(--white); font-size: 1rem; transition: all 0.3s ease; outline: none;"
+                       onfocus="this.style.borderColor='var(--vivid-yellow)'; this.style.boxShadow='0 0 0 3px rgba(246,139,30,0.2)';"
+                       onblur="this.style.borderColor='var(--medium-black)'; this.style.boxShadow='none';">
+            </div>
+        </div>
+
+        <!-- Password field with icon -->
+        <div class="form-group" style="position: relative;">
+            <label for="password" style="display: flex; align-items: center; gap: 0.5rem; color: var(--white); font-weight: 600; margin-bottom: 0.5rem;">
+                <i class="fas fa-lock" style="color: var(--vivid-yellow);"></i>
+                Password
+            </label>
+            <div style="position: relative;">
+                <i class="fas fa-key" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--medium-gray); z-index: 1;"></i>
+                <input type="password" id="password" name="password" required 
+                       placeholder="Enter your password"
+                       style="width: 100%; padding: 0.85rem 0.85rem 0.85rem 45px; border: 2px solid var(--medium-black); border-radius: 12px; background: var(--dark-black); color: var(--white); font-size: 1rem; transition: all 0.3s ease; outline: none;"
+                       onfocus="this.style.borderColor='var(--vivid-yellow)'; this.style.boxShadow='0 0 0 3px rgba(246,139,30,0.2)';"
+                       onblur="this.style.borderColor='var(--medium-black)'; this.style.boxShadow='none';">
+            </div>
+            
+            <!-- Forgot password link -->
+            <div style="text-align: right; margin-top: 0.5rem;">
+                <a href="#" style="color: var(--vivid-yellow); text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.25rem; transition: all 0.3s ease;"
+                   onmouseover="this.style.color='var(--bright-yellow)'; this.style.textDecoration='underline';"
+                   onmouseout="this.style.color='var(--vivid-yellow)'; this.style.textDecoration='none';">
+                    <i class="fas fa-question-circle"></i> Forgot password?
+                </a>
+            </div>
+        </div>
+
+        <!-- Remember me checkbox -->
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin: 0.5rem 0;">
+            <label class="checkbox-container" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <input type="checkbox" id="remember" style="width: 18px; height: 18px; accent-color: var(--vivid-yellow); cursor: pointer;">
+                <span style="color: var(--medium-gray); font-size: 0.95rem;">Remember me for 30 days</span>
+            </label>
+        </div>
+
+        <!-- Login button -->
+        <button type="submit" class="btn btn-large" 
+                style="background: linear-gradient(135deg, var(--vivid-yellow), var(--bright-yellow)); color: var(--rich-black); padding: 1rem; border: none; border-radius: 12px; font-weight: 700; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.75rem; transition: all 0.3s ease; margin-top: 0.5rem; box-shadow: 0 5px 15px rgba(246, 139, 30, 0.3);"
+                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(246,139,30,0.4)';"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(246,139,30,0.3)';">
+            <i class="fas fa-sign-in-alt"></i>
+            Login to Your Account
+        </button>
+    </form>
+    
+    <!-- Sign up link -->
+    <div class="auth-link" style="text-align: center; margin: 1.5rem 0 1rem 0; color: var(--medium-gray);">
+        Don't have an account? 
+        <a href="{% url 'signup' %}" style="color: var(--vivid-yellow); text-decoration: none; font-weight: 600; transition: all 0.3s ease;"
+           onmouseover="this.style.color='var(--bright-yellow)'; this.style.textDecoration='underline';"
+           onmouseout="this.style.color='var(--vivid-yellow)'; this.style.textDecoration='none';">
+            Sign up here <i class="fas fa-arrow-right" style="font-size: 0.9rem;"></i>
+        </a>
+    </div>
+    
+    <!-- Divider with "Or continue with" text -->
+    <div style="position: relative; text-align: center; margin: 1.5rem 0;">
+        <div style="position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--vivid-yellow), transparent);"></div>
+        <span style="background: var(--light-black); padding: 0 1rem; color: var(--medium-gray); font-size: 0.95rem; position: relative; z-index: 1;">
+            <i class="fas fa-circle" style="color: var(--vivid-yellow); font-size: 0.5rem; vertical-align: middle; margin: 0 0.5rem;"></i>
+            Or continue with
+            <i class="fas fa-circle" style="color: var(--vivid-yellow); font-size: 0.5rem; vertical-align: middle; margin: 0 0.5rem;"></i>
+        </span>
+    </div>
+    
+    <!-- Social login buttons -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <button class="btn btn-outline" 
+                style="background: transparent; border: 2px solid var(--medium-black); color: var(--white); padding: 0.85rem; border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.3s ease;"
+                onmouseover="this.style.borderColor='var(--vivid-yellow)'; this.style.color='var(--vivid-yellow)'; this.style.transform='translateY(-2px)';"
+                onmouseout="this.style.borderColor='var(--medium-black)'; this.style.color='var(--white)'; this.style.transform='translateY(0)';">
+            <i class="fab fa-google" style="color: #DB4437; font-size: 1.1rem;"></i>
+            Google
+        </button>
+        <button class="btn btn-outline" 
+                style="background: transparent; border: 2px solid var(--medium-black); color: var(--white); padding: 0.85rem; border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.3s ease;"
+                onmouseover="this.style.borderColor='var(--vivid-yellow)'; this.style.color='var(--vivid-yellow)'; this.style.transform='translateY(-2px)';"
+                onmouseout="this.style.borderColor='var(--medium-black)'; this.style.color='var(--white)'; this.style.transform='translateY(0)';">
+            <i class="fab fa-facebook" style="color: #4267B2; font-size: 1.1rem;"></i>
+            Facebook
+        </button>
+    </div>
+    
+    <!-- Terms and privacy -->
+    <div style="text-align: center; margin-top: 2rem; font-size: 0.8rem; color: var(--medium-gray);">
+        By signing in, you agree to our 
+        <a href="#" style="color: var(--vivid-yellow); text-decoration: none; transition: all 0.3s ease;"
+           onmouseover="this.style.textDecoration='underline';"
+           onmouseout="this.style.textDecoration='none';">Terms of Service</a> 
+        and 
+        <a href="#" style="color: var(--vivid-yellow); text-decoration: none; transition: all 0.3s ease;"
+           onmouseover="this.style.textDecoration='underline';"
+           onmouseout="this.style.textDecoration='none';">Privacy Policy</a>
+    </div>
+</div>
+
+<!-- Add animation keyframes -->
+<style>
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 0.5;
+        }
+        50% {
+            transform: scale(1.1);
+            opacity: 0.2;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 0.5;
+        }
+    }
+    
+    /* Optional: Add floating animation to the container */
+    .auth-container {
+        animation: fadeInUp 0.6s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Input autofill styles */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px var(--dark-black) inset !important;
+        -webkit-text-fill-color: var(--white) !important;
+        border: 2px solid var(--medium-black) !important;
+    }
+    
+    input:-webkit-autofill:focus {
+        border-color: var(--vivid-yellow) !important;
+        box-shadow: 0 0 0 3px rgba(246, 139, 30, 0.2), 0 0 0 30px var(--dark-black) inset !important;
+    }
+</style>
+{% endblock %}

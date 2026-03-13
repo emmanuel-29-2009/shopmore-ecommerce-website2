@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - ShopMore{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>Contact Us</h1>
+        <p>We're here to help with any questions</p>
+    </div>
+</div>
+
+<section class="content-section">
+    <div class="container">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <!-- Contact Information -->
+                <div style="background: var(--light-black); padding: 2rem; border-radius: 10px; border: 1px solid var(--medium-black);">
+                    <h3 style="color: var(--vivid-yellow); margin-bottom: 1.5rem;">Get in Touch</h3>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div style="display: flex; align-items: start; gap: 1rem;">
+                            <div style="color: var(--vivid-yellow); font-size: 1.2rem;">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <strong>Address</strong>
+                                <p style="color: var(--medium-gray); margin: 0.25rem 0 0;">
+                                    123 Commerce Street<br>
+                                    City, State 12345<br>
+                                    United States
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: start; gap: 1rem;">
+                            <div style="color: var(--vivid-yellow); font-size: 1.2rem;">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>
+                                <strong>Phone</strong>
+                                <p style="color: var(--medium-gray); margin: 0.25rem 0 0;">
+                                    +1 (555) 123-4567
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: start; gap: 1rem;">
+                            <div style="color: var(--vivid-yellow); font-size: 1.2rem;">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <strong>Email</strong>
+                                <p style="color: var(--medium-gray); margin: 0.25rem 0 0;">
+                                    support@shopmore.com
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: start; gap: 1rem;">
+                            <div style="color: var(--vivid-yellow); font-size: 1.2rem;">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div>
+                                <strong>Business Hours</strong>
+                                <p style="color: var(--medium-gray); margin: 0.25rem 0 0;">
+                                    Monday - Friday: 9:00 AM - 6:00 PM<br>
+                                    Saturday: 10:00 AM - 4:00 PM<br>
+                                    Sunday: Closed
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div style="background: var(--light-black); padding: 2rem; border-radius: 10px; border: 1px solid var(--medium-black);">
+                    <h3 style="color: var(--vivid-yellow); margin-bottom: 1.5rem;">Send us a Message</h3>
+                    
+                    <form class="auth-form">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

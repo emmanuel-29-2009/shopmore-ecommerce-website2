@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Order Tracking - {{ order.order_number }}{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 3rem 0;">
+    <!-- Back Link -->
+    <div style="margin-bottom: 2rem;">
+        <a href="{% url 'track_order' %}" style="color: var(--medium-gray); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease;">
+            <i class="fas fa-arrow-left"></i> Track Another Order
+        </a>
+    </div>
+
+    <!-- Order Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h1 style="color: var(--vivid-yellow); font-size: 2rem; margin-bottom: 0.5rem;">
+                <i class="fas fa-truck"></i> Track Your Order
+            </h1>
+            <p style="color: var(--medium-gray); font-size: 1.1rem;">
+                Order #{{ order.order_number }}
+            </p>
+        </div>
+        <div style="text-align: right;">
+            <span style="display: inline-block; padding: 0.5rem 1.5rem; border-radius: 30px; background: var(--light-black); color: var(--white); border: 2px solid var(--vivid-yellow);">
+                <i class="fas fa-box"></i> Status: <strong style="color: var(--vivid-yellow); text-transform: uppercase;">{{ current_status }}</strong>
+            </span>
+            {% if shipment.tracking_number %}
+            <p style="margin-top: 0.5rem; color: var(--medium-gray);">
+                <i class="fas fa-barcode"></i> Tracking #: 
+                <strong style="color: var(--white);">{{ shipment.tracking_number }}</strong>
+            </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div style="background: var(--light-black); padding: 2rem; border-radius: 20px; border: 2px solid var(--medium-black); margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--medium-gray); flex-wrap: wrap; gap: 0.5rem;">
+            <span><i class="fas fa-check-circle" style="color: {% if progress_percentage >= 10 %}var(--vivid-yellow){% else %}var(--medium-gray){% endif %};"></i> Order Placed</span>
+            <span><i class="fas fa-box-open" style="color: {% if progress_percentage >= 25 %}var(--vivid-yellow){% else %}var(--medium-gray){% endif %};"></i> Processing</span>
+            <span><i class="fas fa-shipping-fast" style="color: {% if progress_percentage >= 50 %}var(--vivid-yellow){% else %}var(--medium-gray){% endif %};"></i> Shipped</span>
+            <span><i class="fas fa-truck" style="color: {% if progress_percentage >= 85 %}var(--vivid-yellow){% else %}var(--medium-gray){% endif %};"></i> Out for Delivery</span>
+            <span><i class="fas fa-home" style="color: {% if progress_percentage >= 100 %}var(--vivid-yellow){% else %}var(--medium-gray){% endif %};"></i> Delivered</span>
+        </div>
+        <div style="height: 10px; background: var(--medium-black); border-radius: 10px; overflow: hidden;">
+            <div style="height: 100%; width: {{ progress_percentage }}%; background: var(--vivid-yellow); border-radius: 10px; transition: width 0.3s ease;"></div>
+        </div>
+        {% if shipment.estimated_delivery %}
+        <div style="margin-top: 1rem; text-align: right;">
+            <span style="color: var(--medium-gray);">
+                <i class="fas fa-calendar-alt"></i> Estimated Delivery: 
+                <strong style="color: var(--vivid-yellow);">{{ shipment.estimated_delivery|date:"F j, Y" }}</strong>
+            </span>
+        </div>
+        {% endif %}
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        <!-- Left Column - Tracking Timeline -->
+        <div>
+            <h2 style="color: var(--white); margin-bottom: 1.5rem; font-size: 1.5rem;">
+                <i class="fas fa-history" style="color: var(--vivid-yellow); margin-right: 0.5rem;"></i>
+                Tracking Timeline
+            </h2>
+            
+            <div style="background: var(--light-black); border-radius: 20px; border: 2px solid var(--medium-black); padding: 2rem; max-height: 500px; overflow-y: auto;">
+                {% if tracking_events %}
+                    {% for event in tracking_events %}
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; position: relative; padding-left: 1rem; border-left: 3px solid {% if forloop.first %}var(--vivid-yellow){% else %}var(--medium-black){% endif %};">
+                        <div style="flex-shrink: 0;">
+                            <div style="width: 40px; height: 40px; background: {% if forloop.first %}var(--vivid-yellow){% else %}var(--medium-black){% endif %}; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas {% if forloop.first %}fa-check{% else %}fa-circle{% endif %}" style="color: var(--dark-black);"></i>
+                            </div>
+                        </div>
+                        <div style="flex: 1;">
+                            <h4 style="color: var(--white); margin-bottom: 0.25rem; font-size: 1.1rem;">{{ event.event_type }}</h4>
+                            <p style="color: var(--medium-gray); margin-bottom: 0.25rem;">{{ event.description }}</p>
+                            {% if event.location %}
+                            <p style="color: var(--vivid-yellow); font-size: 0.9rem; margin-bottom: 0.25rem;">
+                                <i class="fas fa-map-marker-alt"></i> {{ event.location }}
+                            </p>
+                            {% endif %}
+                            <p style="color: var(--medium-gray); font-size: 0.85rem;">
+                                <i class="far fa-clock"></i> {{ event.event_time|date:"F j, Y, g:i a" }}
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="text-align: center; padding: 3rem 0;">
+                        <i class="fas fa-box-open" style="font-size: 4rem; color: var(--medium-gray); margin-bottom: 1rem;"></i>
+                        <p style="color: var(--medium-gray);">No tracking updates available yet.</p>
+                        <p style="color: var(--medium-gray); font-size: 0.9rem;">Check back soon for updates on your order.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Right Column - Order Details -->
+        <div>
+            <h2 style="color: var(--white); margin-bottom: 1.5rem; font-size: 1.5rem;">
+                <i class="fas fa-shopping-bag" style="color: var(--vivid-yellow); margin-right: 0.5rem;"></i>
+                Order Details
+            </h2>
+            
+            <div style="background: var(--light-black); border-radius: 20px; border: 2px solid var(--medium-black); padding: 2rem;">
+                <!-- Order Info -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--vivid-yellow); margin-bottom: 1rem; font-size: 1.2rem;">
+                        <i class="fas fa-info-circle"></i> Order Information
+                    </h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <p style="color: var(--medium-gray); margin-bottom: 0.25rem;">Order Date</p>
+                            <p style="color: var(--white); font-weight: 600;">{{ order.created_at|date:"F j, Y" }}</p>
+                        </div>
+                        <div>
+                            <p style="color: var(--medium-gray); margin-bottom: 0.25rem;">Order Status</p>
+                            <p style="color: var(--vivid-yellow); font-weight: 600;">{{ order.get_status_display }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Address -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--vivid-yellow); margin-bottom: 1rem; font-size: 1.2rem;">
+                        <i class="fas fa-map-marker-alt"></i> Shipping Address
+                    </h3>
+                    {% if order.shipping_address %}
+                    <p style="color: var(--white); font-weight: 600;">{{ order.shipping_address.full_name }}</p>
+                    <p style="color: var(--medium-gray);">{{ order.shipping_address.address_line1 }}</p>
+                    {% if order.shipping_address.address_line2 %}
+                    <p style="color: var(--medium-gray);">{{ order.shipping_address.address_line2 }}</p>
+                    {% endif %}
+                    <p style="color: var(--medium-gray);">{{ order.shipping_address.city }}, {{ order.shipping_address.state }} {{ order.shipping_address.postal_code }}</p>
+                    <p style="color: var(--medium-gray);">{{ order.shipping_address.country }}</p>
+                    <p style="color: var(--medium-gray); margin-top: 0.5rem;">
+                        <i class="fas fa-phone"></i> {{ order.shipping_address.phone_number }}
+                    </p>
+                    {% else %}
+                    <p style="color: var(--medium-gray);">Shipping address not available</p>
+                    {% endif %}
+                </div>
+
+                <!-- Order Items with Images -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--vivid-yellow); margin-bottom: 1rem; font-size: 1.2rem;">
+                        <i class="fas fa-boxes"></i> Items ({{ order.items.count }})
+                    </h3>
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        {% for item in order.items.all %}
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--medium-black);">
+                            <!-- Product Image -->
+                            <div style="width: 80px; height: 80px; background: var(--dark-black); border-radius: 10px; overflow: hidden; flex-shrink: 0; border: 2px solid var(--medium-black);">
+                                {% if item.product.image %}
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                {% else %}
+                                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--dark-black);">
+                                        <i class="fas fa-box" style="font-size: 2rem; color: var(--medium-gray);"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Product Details -->
+                            <div style="flex: 1;">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <h4 style="color: var(--white); margin-bottom: 0.25rem; font-size: 1.1rem;">{{ item.product.name }}</h4>
+                                        <p style="color: var(--medium-gray); font-size: 0.9rem; margin-bottom: 0.5rem;">{{ item.product.category.name }}</p>
+                                        <p style="color: var(--medium-gray); font-size: 0.9rem;">
+                                            <i class="fas fa-hashtag"></i> SKU: {{ item.product.id }}
+                                        </p>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <p style="color: var(--vivid-yellow); font-weight: 700; font-size: 1.2rem;">${{ item.price }}</p>
+                                    </div>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                                    <span style="color: var(--medium-gray);">
+                                        <i class="fas fa-times"></i> Quantity: <strong style="color: var(--white);">{{ item.quantity }}</strong>
+                                    </span>
+                                    <span style="color: var(--white); font-weight: 600;">
+                                        Total: <span style="color: var(--vivid-yellow);">${{ item.price|floatformat:2 }} x {{ item.quantity }} = ${{ item.price|floatformat:2 }} * {{ item.quantity }}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p style="color: var(--medium-gray); text-align: center; padding: 2rem;">No items found in this order.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div style="background: var(--dark-black); padding: 1.5rem; border-radius: 10px; margin-top: 1rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                        <span style="color: var(--medium-gray);">Subtotal:</span>
+                        <span style="color: var(--white);">${{ order.total_amount }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                        <span style="color: var(--medium-gray);">Shipping:</span>
+                        <span style="color: var(--white);">${{ order.shipping_cost }}</span>
+                    </div>
+                    {% if order.tax %}
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                        <span style="color: var(--medium-gray);">Tax:</span>
+                        <span style="color: var(--white);">${{ order.tax }}</span>
+                    </div>
+                    {% endif %}
+                    <div style="display: flex; justify-content: space-between; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid var(--vivid-yellow);">
+                        <span style="color: var(--white); font-weight: bold; font-size: 1.1rem;">Grand Total:</span>
+                        <span style="color: var(--vivid-yellow); font-weight: bold; font-size: 1.3rem;">${{ order.grand_total }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <a href="{% url 'track_order' %}" class="btn btn-secondary" style="flex: 1; text-decoration: none;">
+                    <i class="fas fa-search"></i> Track Another
+                </a>
+                <a href="{% url 'contact' %}" class="btn btn-outline" style="flex: 1; text-decoration: none;">
+                    <i class="fas fa-headset"></i> Need Help?
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Auto-refresh tracking status every 30 seconds for live orders -->
+{% if order.status != 'delivered' and order.status != 'cancelled' %}
+<script>
+// Auto-refresh the page every 30 seconds to get latest tracking updates
+setTimeout(function() {
+    location.reload();
+}, 30000); // 30 seconds
+
+// Add a small notification that page will refresh
+const refreshNotice = document.createElement('div');
+refreshNotice.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--light-black);
+    color: var(--medium-gray);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    border: 1px solid var(--medium-black);
+    z-index: 1000;
+`;
+refreshNotice.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Auto-refreshing for live updates';
+document.body.appendChild(refreshNotice);
+</script>
+{% endif %}
+{% endblock %}

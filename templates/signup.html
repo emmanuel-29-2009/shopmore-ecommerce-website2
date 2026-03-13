@@ -1,0 +1,342 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Account - ShopMore{% endblock %}
+
+{% block content %}
+<div class="auth-container" style="max-width: 550px; margin: 3rem auto; background: var(--light-black); border-radius: 20px; border: 2px solid var(--vivid-yellow); padding: 2.5rem; box-shadow: 0 10px 30px rgba(246, 139, 30, 0.15);">
+    
+    <!-- Header with decorative elements -->
+    <div style="text-align: center; margin-bottom: 2.5rem; position: relative;">
+        <!-- Decorative lines -->
+        <div style="position: absolute; top: 40px; left: 0; width: 30%; height: 2px; background: linear-gradient(90deg, transparent, var(--vivid-yellow));"></div>
+        <div style="position: absolute; top: 40px; right: 0; width: 30%; height: 2px; background: linear-gradient(90deg, var(--vivid-yellow), transparent);"></div>
+        
+        <!-- Icon with pulse effect -->
+        <div style="width: 90px; height: 90px; background: linear-gradient(135deg, var(--vivid-yellow), var(--bright-yellow)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: var(--rich-black); font-size: 2.5rem; box-shadow: 0 5px 20px rgba(246, 139, 30, 0.4); position: relative;">
+            <i class="fas fa-user-plus"></i>
+            <!-- Pulse effect -->
+            <div style="position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--vivid-yellow); animation: pulse 2s infinite; opacity: 0.5;"></div>
+        </div>
+        
+        <h2 style="color: var(--vivid-yellow); margin-bottom: 0.5rem; font-size: 2rem; font-weight: 700;">Create Your Account</h2>
+        <p style="color: var(--medium-gray); font-size: 1rem;">Join thousands of happy shoppers</p>
+    </div>
+    
+    <!-- Form -->
+    <form method="post" class="auth-form" style="display: flex; flex-direction: column; gap: 1.5rem;">
+        {% csrf_token %}
+        
+        <!-- First Row: First Name & Last Name -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <!-- First Name field -->
+            <div class="form-group">
+                <label for="id_first_name" style="display: flex; align-items: center; gap: 0.5rem; color: var(--white); font-weight: 600; margin-bottom: 0.5rem;">
+                    <i class="fas fa-user" style="color: var(--vivid-yellow);"></i>
+                    First Name
+                </label>
+                <div style="position: relative;">
+                    <i class="fas fa-user-circle" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--medium-gray); z-index: 1; font-size: 0.9rem;"></i>
+                    <input type="text" name="first_name" id="id_first_name" value="{{ form.first_name.value|default:'' }}"
+                           style="width: 100%; padding: 0.85rem 0.85rem 0.85rem 40px; border: 2px solid var(--medium-black); border-radius: 12px; background: var(--dark-black); color: var(--white); font-size: 0.95rem; transition: all 0.3s ease; outline: none;"
+                           placeholder="John"
+                           onfocus="this.style.borderColor='var(--vivid-yellow)'; this.style.boxShadow='0 0 0 3px rgba(246,139,30,0.2)';"
+                           onblur="this.style.borderColor='var(--medium-black)'; this.style.boxShadow='none';">
+                </div>
+                {% if form.first_name.errors %}
+                    <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.25rem;">
+                        <i class="fas fa-exclamation-circle"></i> {{ form.first_name.errors.0 }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Last Name field -->
+            <div class="form-group">
+                <label for="id_last_name" style="display: flex; align-items: center; gap: 0.5rem; color: var(--white); font-weight: 600; margin-bottom: 0.5rem;">
+                    <i class="fas fa-user" style="color: var(--vivid-yellow);"></i>
+                    Last Name
+                </label>
+                <div style="position: relative;">
+                    <i class="fas fa-user-circle" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--medium-gray); z-index: 1; font-size: 0.9rem;"></i>
+                    <input type="text" name="last_name" id="id_last_name" value="{{ form.last_name.value|default:'' }}"
+                           style="width: 100%; padding: 0.85rem 0.85rem 0.85rem 40px; border: 2px solid var(--medium-black); border-radius: 12px; background: var(--dark-black); color: var(--white); font-size: 0.95rem; transition: all 0.3s ease; outline: none;"
+                           placeholder="Doe"
+                           onfocus="this.style.borderColor='var(--vivid-yellow)'; this.style.boxShadow='0 0 0 3px rgba(246,139,30,0.2)';"
+                           onblur="this.style.borderColor='var(--medium-black)'; this.style.boxShadow='none';">
+                </div>
+                {% if form.last_name.errors %}
+                    <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.25rem;">
+                        <i class="fas fa-exclamation-circle"></i> {{ form.last_name.errors.0 }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Username field -->
+        <div class="form-group">
+            <label for="id_username" style="display: flex; align-items: center; gap: 0.5rem; color: var(--white); font-weight: 600; margin-bottom: 0.5rem;">
+                <i class="fas fa-at" style="color: var(--vivid-yellow);"></i>
+                Username
+            </label>
+            <div style="position: relative;">
+                <i class="fas fa-user-tag" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--medium-gray); z-index: 1;"></i>
+                <input type="text" name="username" id="id_username" value="{{ form.username.value|default:'' }}" required
+                       style="width: 100%; padding: 0.85rem 0.85rem 0.85rem 40px; border: 2px solid var(--medium-black); border-radius: 12px; background: var(--dark-black); color: var(--white); font-size: 0.95rem; transition: all 0.3s ease; outline: none;"
+                       placeholder="johndoe123"
+                       onfocus="this.style.borderColor='var(--vivid-yellow)'; this.style.boxShadow='0 0 0 3px rgba(246,139,30,0.2)';"
+                       onblur="this.style.borderColor='var(--medium-black)'; this.style.boxShadow='none';">
+            </div>
+            {% if form.username.errors %}
+                <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.25rem;">
+                    <i class="fas fa-exclamation-circle"></i> {{ form.username.errors.0 }}
+                </div>
+            {% endif %}
+            <div style="font-size: 0.8rem; color: var(--medium-gray); margin-top: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-info-circle" style="color: var(--vivid-yellow);"></i>
+                <span>150 characters or fewer. Letters, digits and @/./+/-/_ only.</span>
+            </div>
+        </div>
+
+        <!-- Email field -->
+        <div class="form-group">
+            <label for="id_email" style="display: flex; align-items: center; gap: 0.5rem; color: var(--white); font-weight: 600; margin-bottom: 0.5rem;">
+                <i class="fas fa-envelope" style="color: var(--vivid-yellow);"></i>
+                Email Address
+            </label>
+            <div style="position: relative;">
+                <i class="fas fa-envelope-open" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--medium-gray); z-index: 1;"></i>
+                <input type="email" name="email" id="id_email" value="{{ form.email.value|default:'' }}" required
+                       style="width: 100%; padding: 0.85rem 0.85rem 0.85rem 40px; border: 2px solid var(--medium-black); border-radius: 12px; background: var(--dark-black); color: var(--white); font-size: 0.95rem; transition: all 0.3s ease; outline: none;"
+                       placeholder="john.doe@example.com"
+                       onfocus="this.style.borderColor='var(--vivid-yellow)'; this.style.boxShadow='0 0 0 3px rgba(246,139,30,0.2)';"
+                       onblur="this.style.borderColor='var(--medium-black)'; this.style.boxShadow='none';">
+            </div>
+            {% if form.email.errors %}
+                <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.25rem;">
+                    <i class="fas fa-exclamation-circle"></i> {{ form.email.errors.0 }}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Password field -->
+        <div class="form-group">
+            <label for="id_password1" style="display: flex; align-items: center; gap: 0.5rem; color: var(--white); font-weight: 600; margin-bottom: 0.5rem;">
+                <i class="fas fa-lock" style="color: var(--vivid-yellow);"></i>
+                Password
+            </label>
+            <div style="position: relative;">
+                <i class="fas fa-key" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--medium-gray); z-index: 1;"></i>
+                <input type="password" name="password1" id="id_password1" required
+                       style="width: 100%; padding: 0.85rem 0.85rem 0.85rem 40px; border: 2px solid var(--medium-black); border-radius: 12px; background: var(--dark-black); color: var(--white); font-size: 0.95rem; transition: all 0.3s ease; outline: none;"
+                       placeholder="••••••••"
+                       onfocus="this.style.borderColor='var(--vivid-yellow)'; this.style.boxShadow='0 0 0 3px rgba(246,139,30,0.2)';"
+                       onblur="this.style.borderColor='var(--medium-black)'; this.style.boxShadow='none';">
+            </div>
+            {% if form.password1.errors %}
+                <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.25rem;">
+                    <i class="fas fa-exclamation-circle"></i> {{ form.password1.errors.0 }}
+                </div>
+            {% endif %}
+            
+            <!-- Password requirements - collapsible/expandable -->
+            <div style="margin-top: 0.75rem; background: var(--dark-black); border-radius: 10px; padding: 0.75rem; border: 1px solid var(--medium-black);">
+                <div style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;" onclick="togglePasswordRequirements()">
+                    <i class="fas fa-shield-alt" style="color: var(--vivid-yellow);"></i>
+                    <span style="color: var(--white); font-weight: 600; font-size: 0.9rem;">Password Requirements</span>
+                    <i class="fas fa-chevron-down" id="requirements-arrow" style="color: var(--medium-gray); margin-left: auto; transition: transform 0.3s ease;"></i>
+                </div>
+                <div id="password-requirements" style="margin-top: 0.75rem; display: block;">
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; color: var(--medium-gray); font-size: 0.85rem;">
+                            <i class="fas fa-times-circle" style="color: var(--danger);" id="req-length"></i>
+                            <span>At least 8 characters</span>
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; color: var(--medium-gray); font-size: 0.85rem;">
+                            <i class="fas fa-times-circle" style="color: var(--danger);" id="req-number"></i>
+                            <span>Not entirely numeric</span>
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; color: var(--medium-gray); font-size: 0.85rem;">
+                            <i class="fas fa-times-circle" style="color: var(--danger);" id="req-common"></i>
+                            <span>Not a commonly used password</span>
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; color: var(--medium-gray); font-size: 0.85rem;">
+                            <i class="fas fa-times-circle" style="color: var(--danger);" id="req-similar"></i>
+                            <span>Not too similar to personal information</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirm Password field -->
+        <div class="form-group">
+            <label for="id_password2" style="display: flex; align-items: center; gap: 0.5rem; color: var(--white); font-weight: 600; margin-bottom: 0.5rem;">
+                <i class="fas fa-lock" style="color: var(--vivid-yellow);"></i>
+                Confirm Password
+            </label>
+            <div style="position: relative;">
+                <i class="fas fa-check-circle" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--medium-gray); z-index: 1;"></i>
+                <input type="password" name="password2" id="id_password2" required
+                       style="width: 100%; padding: 0.85rem 0.85rem 0.85rem 40px; border: 2px solid var(--medium-black); border-radius: 12px; background: var(--dark-black); color: var(--white); font-size: 0.95rem; transition: all 0.3s ease; outline: none;"
+                       placeholder="••••••••"
+                       onfocus="this.style.borderColor='var(--vivid-yellow)'; this.style.boxShadow='0 0 0 3px rgba(246,139,30,0.2)';"
+                       onblur="this.style.borderColor='var(--medium-black)'; this.style.boxShadow='none';">
+            </div>
+            {% if form.password2.errors %}
+                <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.25rem;">
+                    <i class="fas fa-exclamation-circle"></i> {{ form.password2.errors.0 }}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Terms and conditions checkbox -->
+        <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin: 1rem 0; background: var(--dark-black); padding: 1rem; border-radius: 12px; border: 1px solid var(--medium-black);">
+            <input type="checkbox" id="terms" style="width: 18px; height: 18px; accent-color: var(--vivid-yellow); margin-top: 0.15rem; cursor: pointer;">
+            <label for="terms" style="color: var(--medium-gray); font-size: 0.9rem; line-height: 1.5;">
+                I agree to the <a href="#" style="color: var(--vivid-yellow); text-decoration: none; transition: all 0.3s ease;"
+                   onmouseover="this.style.textDecoration='underline';"
+                   onmouseout="this.style.textDecoration='none';">Terms of Service</a> and 
+                <a href="#" style="color: var(--vivid-yellow); text-decoration: none; transition: all 0.3s ease;"
+                   onmouseover="this.style.textDecoration='underline';"
+                   onmouseout="this.style.textDecoration='none';">Privacy Policy</a>
+            </label>
+        </div>
+
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-large" 
+                style="background: linear-gradient(135deg, var(--vivid-yellow), var(--bright-yellow)); color: var(--rich-black); padding: 1rem; border: none; border-radius: 12px; font-weight: 700; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.75rem; transition: all 0.3s ease; margin-top: 0.5rem; box-shadow: 0 5px 15px rgba(246, 139, 30, 0.3);"
+                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(246,139,30,0.4)';"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(246,139,30,0.3)';">
+            <i class="fas fa-user-plus"></i>
+            Create Account
+        </button>
+    </form>
+    
+    <!-- Login link -->
+    <div class="auth-link" style="text-align: center; margin: 2rem 0 1rem 0; color: var(--medium-gray);">
+        Already have an account? 
+        <a href="{% url 'login' %}" style="color: var(--vivid-yellow); text-decoration: none; font-weight: 600; transition: all 0.3s ease;"
+           onmouseover="this.style.color='var(--bright-yellow)'; this.style.textDecoration='underline';"
+           onmouseout="this.style.color='var(--vivid-yellow)'; this.style.textDecoration='none';">
+            Login here <i class="fas fa-arrow-right" style="font-size: 0.9rem;"></i>
+        </a>
+    </div>
+    
+    <!-- Email consent notice -->
+    <div style="border-top: 1px solid var(--medium-black); margin-top: 1.5rem; padding-top: 1.5rem;">
+        <p style="text-align: center; color: var(--medium-gray); font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <i class="fas fa-envelope-open-text" style="color: var(--vivid-yellow);"></i>
+            By creating an account, you agree to receive emails about promotions, special offers, and updates.
+        </p>
+    </div>
+</div>
+
+<!-- Add animation and password toggle scripts -->
+<style>
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 0.5;
+        }
+        50% {
+            transform: scale(1.1);
+            opacity: 0.2;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 0.5;
+        }
+    }
+    
+    .auth-container {
+        animation: fadeInUp 0.6s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Input autofill styles */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px var(--dark-black) inset !important;
+        -webkit-text-fill-color: var(--white) !important;
+        border: 2px solid var(--medium-black) !important;
+    }
+    
+    input:-webkit-autofill:focus {
+        border-color: var(--vivid-yellow) !important;
+        box-shadow: 0 0 0 3px rgba(246, 139, 30, 0.2), 0 0 0 30px var(--dark-black) inset !important;
+    }
+    
+    /* Password requirements animation */
+    #password-requirements {
+        transition: all 0.3s ease;
+    }
+    
+    .password-requirements-hidden {
+        display: none !important;
+    }
+    
+    .rotate-arrow {
+        transform: rotate(180deg);
+    }
+</style>
+
+<script>
+    // Toggle password requirements visibility
+    function togglePasswordRequirements() {
+        const requirements = document.getElementById('password-requirements');
+        const arrow = document.getElementById('requirements-arrow');
+        
+        if (requirements.style.display === 'none') {
+            requirements.style.display = 'block';
+            arrow.style.transform = 'rotate(0deg)';
+        } else {
+            requirements.style.display = 'none';
+            arrow.style.transform = 'rotate(180deg)';
+        }
+    }
+    
+    // Password strength checker (optional enhancement)
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordInput = document.getElementById('id_password1');
+        
+        if (passwordInput) {
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                const lengthReq = document.getElementById('req-length');
+                const numberReq = document.getElementById('req-number');
+                const commonReq = document.getElementById('req-common');
+                const similarReq = document.getElementById('req-similar');
+                
+                // Check length
+                if (password.length >= 8) {
+                    lengthReq.innerHTML = '<i class="fas fa-check-circle" style="color: var(--success);"></i> At least 8 characters';
+                    lengthReq.style.color = 'var(--success)';
+                } else {
+                    lengthReq.innerHTML = '<i class="fas fa-times-circle" style="color: var(--danger);"></i> At least 8 characters';
+                    lengthReq.style.color = 'var(--medium-gray)';
+                }
+                
+                // Check if entirely numeric
+                if (/^\d+$/.test(password)) {
+                    numberReq.innerHTML = '<i class="fas fa-times-circle" style="color: var(--danger);"></i> Not entirely numeric';
+                    numberReq.style.color = 'var(--danger)';
+                } else {
+                    numberReq.innerHTML = '<i class="fas fa-check-circle" style="color: var(--success);"></i> Not entirely numeric';
+                    numberReq.style.color = 'var(--success)';
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

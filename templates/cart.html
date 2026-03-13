@@ -1,0 +1,504 @@
+{% extends 'base.html' %}
+{% load mathfilters %}
+
+{% block title %}Shopping Cart - ShopMore{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>Shopping Cart 🛒</h1>
+        <p>Review your items and proceed to checkout</p>
+    </div>
+</div>
+
+<section class="content-section">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem;">
+            <!-- Cart Items -->
+            <div>
+                <div style="background: var(--light-black); padding: 2rem; border-radius: 15px; border: 1px solid var(--medium-black);">
+                    {% if cart_items %}
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                            <h3 style="color: var(--vivid-yellow);">Your Cart ({{ total_items }} items)</h3>
+                            <form method="POST" action="{% url 'clear_cart' %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline btn-small" onclick="return confirm('Are you sure you want to clear your entire cart?')">
+                                    <i class="fas fa-trash"></i>
+                                    Clear Cart
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <div class="cart-items">
+                            {% for item in cart_items %}
+                            <div class="cart-item" style="display: flex; align-items: center; gap: 1rem; padding: 1.5rem 0; border-bottom: 1px solid var(--medium-black);">
+                                <div class="cart-item-image" style="width: 80px; height: 80px; background: var(--dark-black); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                    {% if item.product.image %}
+                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                                    {% else %}
+                                        <i class="fas fa-box" style="font-size: 2rem; color: var(--medium-gray);"></i>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="cart-item-details" style="flex: 1;">
+                                    <h4 style="margin: 0 0 0.5rem 0; color: var(--white);">{{ item.product.name }}</h4>
+                                    <p style="color: var(--medium-gray); margin: 0 0 0.5rem 0;">{{ item.product.category.name }}</p>
+                                    <div class="cart-item-price" style="color: var(--vivid-yellow); font-weight: 600;">${{ item.product.price }}</div>
+                                </div>
+                                
+                                <div class="quantity-controls" style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <button class="quantity-btn decrease-btn" data-item="{{ item.id }}" style="background: var(--dark-black); border: 1px solid var(--medium-black); color: var(--white); width: 35px; height: 35px; border-radius: 5px; cursor: pointer;">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="number" class="quantity-input" value="{{ item.quantity }}" min="1" max="10" data-item="{{ item.id }}" style="width: 50px; text-align: center; padding: 0.5rem; border-radius: 5px; border: 1px solid var(--medium-black); background: var(--dark-black); color: var(--white);">
+                                    <button class="quantity-btn increase-btn" data-item="{{ item.id }}" style="background: var(--dark-black); border: 1px solid var(--medium-black); color: var(--white); width: 35px; height: 35px; border-radius: 5px; cursor: pointer;">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                
+                                <div style="text-align: right; min-width: 120px;">
+                                    <div class="cart-item-price" style="font-size: 1.2rem; font-weight: 700; color: var(--white);">
+                                        ${{ item.total_price }}
+                                    </div>
+                                    <form method="POST" action="{% url 'remove_from_cart' item.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-outline btn-small remove-btn" style="margin-top: 0.5rem; background: transparent; border: 1px solid var(--medium-gray); color: var(--medium-gray); padding: 0.25rem 0.75rem; border-radius: 5px; cursor: pointer;">
+                                            <i class="fas fa-trash"></i>
+                                            Remove
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div style="text-align: center; padding: 3rem 2rem;">
+                            <div style="font-size: 4rem; color: var(--medium-gray); margin-bottom: 1rem;">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h3 style="color: var(--vivid-yellow); margin-bottom: 1rem;">Your cart is empty</h3>
+                            <p style="color: var(--medium-gray); margin-bottom: 2rem;">Start shopping to add items to your cart</p>
+                            <a href="{% url 'products' %}" class="btn btn-large" style="background: var(--vivid-yellow); color: var(--dark-black); padding: 1rem 2rem; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                                <i class="fas fa-shopping-bag"></i>
+                                Continue Shopping
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Continue Shopping -->
+                {% if cart_items %}
+                <div style="margin-top: 2rem;">
+                    <a href="{% url 'products' %}" class="btn btn-outline" style="display: flex; align-items: center; gap: 0.5rem; width: 100%; background: transparent; border: 1px solid var(--medium-gray); color: var(--medium-gray); padding: 1rem; border-radius: 8px; text-decoration: none; justify-content: center;">
+                        <i class="fas fa-arrow-left"></i>
+                        Continue Shopping
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Order Summary & Checkout -->
+            {% if cart_items %}
+            <div>
+                <div class="cart-summary" style="background: var(--light-black); padding: 2rem; border-radius: 15px; border: 1px solid var(--medium-black);">
+                    <h3 style="color: var(--vivid-yellow); margin-bottom: 1.5rem;">Order Summary</h3>
+                    
+                    <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--white);">
+                        <span>Subtotal ({{ total_items }} items)</span>
+                        <span>${{ subtotal }}</span>
+                    </div>
+                    
+                    <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--white);">
+                        <span>Shipping</span>
+                        <span id="shipping-display">
+                            {% if subtotal > 50 %}
+                                <span style="color: var(--success);">FREE</span>
+                            {% else %}
+                                ${{ shipping }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    
+                    <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--white);">
+                        <span>Tax</span>
+                        <span>${{ tax }}</span>
+                    </div>
+                    
+                    <div class="summary-row total" style="display: flex; justify-content: space-between; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--medium-black); font-size: 1.2rem; font-weight: 700; color: var(--vivid-yellow);">
+                        <span>Total</span>
+                        <span id="total-display">${{ total }}</span>
+                    </div>
+
+                    <!-- Shipping Progress -->
+                    {% if subtotal < 50 %}
+                    <div style="background: var(--dark-black); padding: 1rem; border-radius: 8px; margin: 1.5rem 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="color: var(--medium-gray); font-size: 0.9rem;">Free shipping on orders over $50</span>
+                            <span style="color: var(--vivid-yellow); font-weight: 600;">${{ 50|sub:subtotal|floatformat:2 }} away</span>
+                        </div>
+                        <div style="background: var(--medium-black); height: 6px; border-radius: 3px; overflow: hidden;">
+                            <div style="background: var(--vivid-yellow); height: 100%; width: {{ progress_percentage }}%;"></div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div style="background: var(--success); color: white; padding: 1rem; border-radius: 8px; text-align: center; margin: 1.5rem 0;">
+                        <i class="fas fa-shipping-fast"></i> You qualify for free shipping!
+                    </div>
+                    {% endif %}
+
+                    <!-- Complete Checkout Form -->
+                    <form method="POST" action="{% url 'process_checkout' %}" id="checkoutForm">
+                        {% csrf_token %}
+                        
+                        <h4 style="color: var(--white); margin: 1.5rem 0 1rem 0;">Shipping Information</h4>
+                        
+                        <input type="text" 
+                               name="full_name" 
+                               placeholder="Full Name *" 
+                               id="full_name" 
+                               class="checkout-input" 
+                               value="{{ user.get_full_name|default:user.username }}"
+                               required>
+                        
+                        <input type="email" 
+                               name="email" 
+                               placeholder="Email Address *" 
+                               id="email" 
+                               class="checkout-input" 
+                               value="{{ user.email }}"
+                               required>
+                        
+                        <input type="tel" 
+                               name="phone" 
+                               placeholder="Phone Number *" 
+                               id="phone" 
+                               class="checkout-input" 
+                               value="{{ user.userprofile.phone_number|default:'' }}"
+                               required>
+                        
+                        <textarea name="address" 
+                                  placeholder="Delivery Address *" 
+                                  id="address" 
+                                  class="checkout-input" 
+                                  required>{{ user.userprofile.address|default:'' }}</textarea>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                            <input type="text" 
+                                   name="city" 
+                                   placeholder="City *" 
+                                   id="city" 
+                                   class="checkout-input" 
+                                   required>
+                            
+                            <input type="text" 
+                                   name="state" 
+                                   placeholder="State *" 
+                                   id="state" 
+                                   class="checkout-input" 
+                                   required>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                            <input type="text" 
+                                   name="zip_code" 
+                                   placeholder="ZIP Code *" 
+                                   id="zip_code" 
+                                   class="checkout-input" 
+                                   required>
+                            
+                            <input type="text" 
+                                   name="country" 
+                                   placeholder="Country *" 
+                                   id="country" 
+                                   class="checkout-input" 
+                                   value="United States"
+                                   required>
+                        </div>
+                        
+                        <h4 style="color: var(--white); margin: 1.5rem 0 1rem 0;">Shipping Method</h4>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
+                            <label style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: var(--dark-black); border-radius: 8px; cursor: pointer;">
+                                <input type="radio" name="shipping_method" value="standard" checked style="accent-color: var(--vivid-yellow);" onchange="updateShippingCost(10)">
+                                <div style="flex: 1;">
+                                    <span style="color: var(--white); font-weight: 600;">Standard Shipping</span>
+                                    <span style="color: var(--medium-gray); display: block; font-size: 0.9rem;">5-7 business days</span>
+                                </div>
+                                <span style="color: var(--vivid-yellow); font-weight: 600;">$10.00</span>
+                            </label>
+                            
+                            <label style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: var(--dark-black); border-radius: 8px; cursor: pointer;">
+                                <input type="radio" name="shipping_method" value="express" style="accent-color: var(--vivid-yellow);" onchange="updateShippingCost(20)">
+                                <div style="flex: 1;">
+                                    <span style="color: var(--white); font-weight: 600;">Express Shipping</span>
+                                    <span style="color: var(--medium-gray); display: block; font-size: 0.9rem;">2-3 business days</span>
+                                </div>
+                                <span style="color: var(--vivid-yellow); font-weight: 600;">$20.00</span>
+                            </label>
+                        </div>
+                        
+                        <h4 style="color: var(--white); margin: 1rem 0;">Payment Method</h4>
+                        
+                        <!-- ONLY FLUTTERWAVE - PayPal removed -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: var(--dark-black); border-radius: 8px; cursor: pointer; border: 2px solid var(--vivid-yellow);">
+                                <input type="radio" name="payment_method" value="card" checked style="accent-color: var(--vivid-yellow); width: 18px; height: 18px;">
+                                <i class="fas fa-credit-card" style="color: var(--vivid-yellow); font-size: 1.2rem;"></i>
+                                <div style="flex: 1;">
+                                    <span style="color: var(--white); font-weight: 600;">Credit / Debit Card</span>
+                                    <span style="color: var(--medium-gray); display: block; font-size: 0.85rem;">Secure payment via Flutterwave</span>
+                                </div>
+                                <img src="https://res.cloudinary.com/demo/image/fetch/https://flutterwave.com/images/logo-colored.svg" alt="Flutterwave" style="height: 24px; opacity: 0.9;">
+                            </label>
+                            
+                            <!-- Hidden input to ensure payment_method is always 'card' -->
+                            <input type="hidden" name="payment_method" value="card">
+                        </div>
+
+                        <button type="submit" class="checkout-btn" id="submitBtn">
+                            <i class="fas fa-lock"></i> Pay Securely with Flutterwave 💳
+                        </button>
+                    </form>
+
+                    <!-- Security Badge -->
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <div style="display: flex; justify-content: center; gap: 1rem; color: var(--medium-gray); font-size: 0.9rem;">
+                            <span><i class="fas fa-shield-alt"></i> Secure Checkout</span>
+                            <span><i class="fas fa-lock"></i> SSL Encrypted</span>
+                        </div>
+                        <div style="margin-top: 0.5rem; color: var(--medium-gray); font-size: 0.85rem;">
+                            <i class="fas fa-check-circle" style="color: var(--vivid-yellow);"></i> Payments powered by Flutterwave
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trust Badges -->
+                <div style="background: var(--light-black); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--medium-black); margin-top: 2rem;">
+                    <h4 style="color: var(--white); margin-bottom: 1rem; text-align: center;">Why Shop With Us?</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: center;">
+                        <div>
+                            <div style="color: var(--vivid-yellow); font-size: 1.5rem; margin-bottom: 0.5rem;">
+                                <i class="fas fa-undo"></i>
+                            </div>
+                            <span style="color: var(--medium-gray); font-size: 0.85rem;">30-Day Returns</span>
+                        </div>
+                        <div>
+                            <div style="color: var(--vivid-yellow); font-size: 1.5rem; margin-bottom: 0.5rem;">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <span style="color: var(--medium-gray); font-size: 0.85rem;">Secure Payment</span>
+                        </div>
+                        <div>
+                            <div style="color: var(--vivid-yellow); font-size: 1.5rem; margin-bottom: 0.5rem;">
+                                <i class="fas fa-shipping-fast"></i>
+                            </div>
+                            <span style="color: var(--medium-gray); font-size: 0.85rem;">Fast Shipping</span>
+                        </div>
+                        <div>
+                            <div style="color: var(--vivid-yellow); font-size: 1.5rem; margin-bottom: 0.5rem;">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <span style="color: var(--medium-gray); font-size: 0.85rem;">24/7 Support</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Track Order Link -->
+                <div style="margin-top: 1rem; text-align: center;">
+                    <a href="{% url 'track_order' %}" style="color: var(--medium-gray); text-decoration: none; font-size: 0.9rem;">
+                        <i class="fas fa-truck"></i> Track Your Order
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<style>
+.checkout-input {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #0f0f0f;
+    color: #ffffff;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.checkout-input:focus {
+    border-color: #F68B1E;
+    background: #0a0a0a;
+    box-shadow: 0 0 0 3px rgba(246, 139, 30, 0.2);
+}
+
+.checkout-input::placeholder {
+    color: #888;
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 16px;
+    background: #F68B1E;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    color: #000;
+    transition: all 0.3s ease;
+}
+
+.checkout-btn:hover {
+    background: #ffa23d;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(246, 139, 30, 0.3);
+}
+
+.checkout-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+textarea.checkout-input {
+    min-height: 90px;
+    resize: vertical;
+}
+
+/* Loading spinner */
+.spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0,0,0,.3);
+    border-radius: 50%;
+    border-top-color: #000;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+</style>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Quantity controls
+document.addEventListener('DOMContentLoaded', function() {
+    const decreaseBtns = document.querySelectorAll('.decrease-btn');
+    const increaseBtns = document.querySelectorAll('.increase-btn');
+    const quantityInputs = document.querySelectorAll('.quantity-input');
+
+    decreaseBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const itemId = this.dataset.item;
+            const input = document.querySelector(`.quantity-input[data-item="${itemId}"]`);
+            if (parseInt(input.value) > 1) {
+                input.value = parseInt(input.value) - 1;
+                updateCartItem(itemId, input.value);
+            }
+        });
+    });
+
+    increaseBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const itemId = this.dataset.item;
+            const input = document.querySelector(`.quantity-input[data-item="${itemId}"]`);
+            if (parseInt(input.value) < 10) {
+                input.value = parseInt(input.value) + 1;
+                updateCartItem(itemId, input.value);
+            }
+        });
+    });
+
+    quantityInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            const itemId = this.dataset.item;
+            let value = parseInt(this.value);
+            if (value < 1) value = 1;
+            if (value > 10) value = 10;
+            this.value = value;
+            updateCartItem(itemId, value);
+        });
+    });
+
+    function updateCartItem(itemId, quantity) {
+        fetch(`/cart/update/${itemId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({quantity: quantity})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error updating cart: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating cart. Please try again.');
+        });
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+
+// Shipping cost calculator
+function updateShippingCost(cost) {
+    const subtotal = {{ subtotal }};
+    const tax = {{ tax }};
+    let shipping = cost;
+    
+    // Check if free shipping applies
+    {% if subtotal > 50 %}
+    if (cost === 10) {
+        shipping = 0;
+        document.getElementById('shipping-display').innerHTML = '<span style="color: var(--success);">FREE</span>';
+    } else {
+        document.getElementById('shipping-display').innerHTML = '$' + cost.toFixed(2);
+    }
+    {% else %}
+    document.getElementById('shipping-display').innerHTML = '$' + cost.toFixed(2);
+    {% endif %}
+    
+    const total = subtotal + shipping + tax;
+    document.getElementById('total-display').innerHTML = '$' + total.toFixed(2);
+}
+
+// Form submission with loading state
+document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+    const submitBtn = document.getElementById('submitBtn');
+    
+    // Disable button to prevent double submission
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner"></span> Processing...';
+    
+    // Form will submit normally to process_checkout
+    // The button will be re-enabled if there's an error (page reload)
+});
+</script>
+{% endblock %}

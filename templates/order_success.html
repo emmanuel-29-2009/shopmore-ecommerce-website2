@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Success - ShopMore{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>Order Successful! 🎉</h1>
+        <p>Thank you for your purchase</p>
+    </div>
+</div>
+
+<section class="content-section">
+    <div class="container">
+        <div style="text-align: center; padding: 4rem 2rem;">
+            <div style="font-size: 4rem; color: var(--success); margin-bottom: 1rem;">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 style="color: var(--vivid-yellow); margin-bottom: 1rem;">Order Confirmed!</h2>
+            <p style="color: var(--medium-gray); margin-bottom: 0.5rem; font-size: 1.1rem;">
+                Your order <strong>#{{ order.id }}</strong> has been placed successfully.
+            </p>
+            <p style="color: var(--medium-gray); margin-bottom: 2rem;">
+                Total Amount: <strong style="color: var(--vivid-yellow);">${{ order.total_amount }}</strong>
+            </p>
+            
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="{% url 'orders' %}" class="btn btn-large" style="background: var(--vivid-yellow); color: var(--dark-black); padding: 1rem 2rem; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                    <i class="fas fa-list"></i>
+                    View Orders
+                </a>
+                <a href="{% url 'products' %}" class="btn btn-outline" style="background: transparent; border: 1px solid var(--medium-gray); color: var(--medium-gray); padding: 1rem 2rem; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                    <i class="fas fa-shopping-bag"></i>
+                    Continue Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

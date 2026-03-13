@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - ShopMore{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>Welcome back, {{ user.username }}! 👋</h1>
+        <p>Here's your shopping dashboard and recent activity</p>
+    </div>
+</div>
+
+<section class="content-section">
+    <div class="container">
+        <!-- Quick Stats -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+            <div style="background: linear-gradient(135deg, var(--light-black), var(--medium-black)); padding: 1.5rem; border-radius: 15px; text-align: center; border: 1px solid var(--medium-black);">
+                <div style="font-size: 2.5rem; color: var(--vivid-yellow); margin-bottom: 0.5rem;">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <h3 style="color: var(--white); margin-bottom: 0.5rem;">{{ orders.count }}</h3>
+                <p style="color: var(--medium-gray);">Total Orders</p>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, var(--light-black), var(--medium-black)); padding: 1.5rem; border-radius: 15px; text-align: center; border: 1px solid var(--medium-black);">
+                <div style="font-size: 2.5rem; color: var(--vivid-yellow); margin-bottom: 0.5rem;">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3 style="color: var(--white); margin-bottom: 0.5rem;">{{ wishlist_count }}</h3>
+                <p style="color: var(--medium-gray);">Wishlist Items</p>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, var(--light-black), var(--medium-black)); padding: 1.5rem; border-radius: 15px; text-align: center; border: 1px solid var(--medium-black);">
+                <div style="font-size: 2.5rem; color: var(--vivid-yellow); margin-bottom: 0.5rem;">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3 style="color: var(--white); margin-bottom: 0.5rem;">12</h3>
+                <p style="color: var(--medium-gray);">Reviews Given</p>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, var(--light-black), var(--medium-black)); padding: 1.5rem; border-radius: 15px; text-align: center; border: 1px solid var(--medium-black);">
+                <div style="font-size: 2.5rem; color: var(--vivid-yellow); margin-bottom: 0.5rem;">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3 style="color: var(--white); margin-bottom: 0.5rem;">Gold</h3>
+                <p style="color: var(--medium-gray);">Member Level</p>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Recent Orders -->
+            <div class="dashboard-card">
+                <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3>Recent Orders</h3>
+                    <a href="{% url 'orders' %}" style="color: var(--vivid-yellow); text-decoration: none; font-size: 0.9rem;">
+                        View All <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                {% if orders %}
+                    <div class="orders-list">
+                        {% for order in orders %}
+                        <div class="order-item">
+                            <div class="order-info">
+                                <div>
+                                    <strong>Order #{{ order.order_number }}</strong>
+                                    <div style="color: var(--medium-gray); font-size: 0.9rem; margin-top: 0.25rem;">
+                                        {{ order.created_at|date:"M d, Y" }} • ${{ order.total_amount }}
+                                    </div>
+                                </div>
+                                <span class="status {{ order.status }}">{{ order.status|title }}</span>
+                            </div>
+                            <div class="order-details">
+                                <span>Items: {{ order.items.count }}</span>
+                                <span>Payment: {{ order.payment_status|title }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div style="text-align: center; padding: 3rem 2rem;">
+                        <div style="font-size: 4rem; color: var(--medium-gray); margin-bottom: 1rem;">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <h4 style="color: var(--vivid-yellow); margin-bottom: 1rem;">No orders yet</h4>
+                        <p style="color: var(--medium-gray); margin-bottom: 2rem;">Start shopping to see your orders here</p>
+                        <a href="{% url 'products' %}" class="btn">Start Shopping</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Quick Actions & Account Summary -->
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <!-- Quick Actions -->
+                <div class="dashboard-card">
+                    <h3>Quick Actions</h3>
+                    <div class="action-buttons">
+                        <a href="{% url 'products' %}" class="btn" style="display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="fas fa-shopping-bag"></i>
+                            Shop Products
+                        </a>
+                        <a href="{% url 'profile' %}" class="btn btn-secondary" style="display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="fas fa-user-edit"></i>
+                            Update Profile
+                        </a>
+                        <a href="{% url 'orders' %}" class="btn btn-secondary" style="display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="fas fa-clipboard-list"></i>
+                            Order History
+                        </a>
+                        <a href="{% url 'wishlist' %}" class="btn btn-secondary" style="display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="fas fa-heart"></i>
+                            Wishlist
+                        </a>
+                        <a href="{% url 'settings' %}" class="btn btn-outline" style="display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="fas fa-cog"></i>
+                            Settings
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Account Summary -->
+                <div class="dashboard-card">
+                    <h3>Account Summary</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="display: flex; justify-content: between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--medium-black);">
+                            <span style="color: var(--medium-gray);">Member Since</span>
+                            <span>{{ user.date_joined|date:"M d, Y" }}</span>
+                        </div>
+                        <div style="display: flex; justify-content: between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--medium-black);">
+                            <span style="color: var(--medium-gray);">Email Verified</span>
+                            <span style="color: var(--success);">
+                                <i class="fas fa-check-circle"></i> Verified
+                            </span>
+                        </div>
+                        <div style="display: flex; justify-content: between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--medium-black);">
+                            <span style="color: var(--medium-gray);">Loyalty Points</span>
+                            <span style="color: var(--vivid-yellow); font-weight: 600;">1,250 pts</span>
+                        </div>
+                        <div style="display: flex; justify-content: between; align-items: center; padding: 0.75rem 0;">
+                            <span style="color: var(--medium-gray);">Account Status</span>
+                            <span style="color: var(--success); font-weight: 600;">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommended Products -->
+        <div class="dashboard-card" style="margin-top: 2rem;">
+            <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1.5rem;">
+                <h3>Recommended For You</h3>
+                <a href="{% url 'products' %}" style="color: var(--vivid-yellow); text-decoration: none; font-size: 0.9rem;">
+                    View All <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="products-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                <!-- Sample recommended products -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title">Wireless Headphones</h4>
+                        <div class="product-price">
+                            <span class="current-price">$199.99</span>
+                        </div>
+                        <button class="btn btn-small">Add to Cart</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title">Premium T-Shirt</h4>
+                        <div class="product-price">
+                            <span class="current-price">$29.99</span>
+                        </div>
+                        <button class="btn btn-small">Add to Cart</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title">Bestseller Book</h4>
+                        <div class="product-price">
+                            <span class="current-price">$24.99</span>
+                        </div>
+                        <button class="btn btn-small">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

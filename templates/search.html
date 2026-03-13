@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+
+<div class="container" style="padding:3rem 0;">
+
+<h2 style="color:var(--vivid-yellow); margin-bottom:2rem;">
+Search Results for "{{ query }}"
+</h2>
+
+{% if products %}
+
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2rem;">
+
+{% for product in products %}
+<div style="background:var(--light-black);padding:1.5rem;border-radius:12px;">
+
+<!-- FIXED: Added proper image container with constrained dimensions -->
+<div style="width:100%; height:200px; margin-bottom:1rem; overflow:hidden; border-radius:8px;">
+    <img src="{{ product.image.url }}"
+         style="width:100%; height:100%; object-fit:cover; object-position:center;"
+         alt="{{ product.name }}"
+         onerror="this.src='https://via.placeholder.com/250x200?text=No+Image'">
+</div>
+
+<h3 style="color:white; margin-bottom:0.5rem;">{{ product.name }}</h3>
+
+<p style="color:var(--vivid-yellow); font-weight:bold; font-size:1.2rem;">
+${{ product.price }}
+</p>
+
+<a href="{% url 'product_detail' product.id %}"
+   style="display:inline-block; margin-top:1rem; background:var(--vivid-yellow);
+          color:black; padding:8px 14px; border-radius:6px; text-decoration:none;">
+    View Product
+</a>
+
+</div>
+{% endfor %}
+
+</div>
+
+{% else %}
+<p style="color:var(--medium-gray);">
+No products found.
+</p>
+{% endif %}
+
+</div>
+
+{% endblock %}
