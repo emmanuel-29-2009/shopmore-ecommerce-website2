@@ -11,7 +11,10 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-your-secret-key-here'
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['shopmore.fly.dev', 'localhost', '127.0.0.1']
+
+ALLOWED_HOSTS = ['*', '.onrender.com', 'shopmore.fly.dev', 'localhost', '127.0.0.1']
+
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com', 'https://*.fly.dev']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
