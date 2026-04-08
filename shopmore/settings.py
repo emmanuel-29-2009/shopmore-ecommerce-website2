@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-your-secret-key-here')
 
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = ['*', '.onrender.com', 'shopmore.fly.dev', 'localhost', '127.0.0.1']
@@ -104,13 +104,14 @@ FLUTTERWAVE_SECRET_KEY = "FLWSECK_TEST-3e3c6363448c60e6e29d9bbc0a5364b0-X"
 FLUTTERWAVE_ENCRYPTION_KEY = "FLWSECK_TESTba3824b8453d"
 
 # Security settings for production
+# Security settings for production
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    # SECURE_SSL_REDIRECT = True  # Commented out for Render
+    # SESSION_COOKIE_SECURE = True  # Commented out for Render
+    # CSRF_COOKIE_SECURE = True  # Commented out for Render
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    # SECURE_HSTS_SECONDS = 31536000  # Commented out for Render
+    # SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Commented out for Render
+    # SECURE_HSTS_PRELOAD = True  # Commented out for Render
+    # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Commented out for Render
